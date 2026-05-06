@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triumph Business Solutions — Prompt Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #1D364F;
+    --olive:   #88965E;
+    --copper:  #9D541C;
+    --teal:    #477474;
+    --blue:    #264867;
+    --navy-dk: #152840;
+    --navy-lt: #243f5c;
+    --copper-lt: #C4793A;
+    --off-white: #F5F3EF;
+    --warm-white: #FDFCFA;
+    --border:  #DDD9D0;
+    --border2: #C8C3B8;
+    --text:    #1A2B3C;
+    --text2:   #5A6A7A;
+    --text3:   #8A9AAA;
+    --radius:  10px;
+    --radius-sm: 6px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--off-white); color: var(--text); min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 270px; flex-shrink: 0;
+    background: var(--navy);
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 10;
+    overflow: hidden;
+  }
+  /* Subtle texture overlay */
+  .sidebar::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, transparent, transparent 40px, rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 80px);
+    pointer-events: none;
+  }
+
+  .sidebar-header {
+    padding: 0.75rem 1.25rem 0.6rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+  }
+  .brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0; }
+  .brand-icon { display: none; }
+  .brand-text { }
+  .brand-name { font-size: 13px; font-weight: 800; color: #fff; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.1; }
+  .brand-sub  { font-size: 9.5px; font-weight: 400; color: rgba(255,255,255,0.45); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+  .library-label { font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-top: 6px; }
+
+  .sidebar-search { padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.07); position: relative; }
+  .sidebar-search input {
+    width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-sm); padding: 8px 12px 8px 32px;
+    font-family: 'Inter', sans-serif; font-size: 13px; color: #fff; outline: none;
+    transition: all 0.15s;
+  }
+  .sidebar-search input::placeholder { color: rgba(255,255,255,0.3); }
+  .sidebar-search input:focus { border-color: var(--copper-lt); background: rgba(255,255,255,0.12); }
+  .search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: 0.4; pointer-events: none; }
+
+  .sidebar-section { padding: 1.1rem 1.25rem 0.4rem; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 600; }
+  .cat-list { flex: 1; overflow-y: auto; padding-bottom: 1rem; }
+  .cat-list::-webkit-scrollbar { width: 4px; }
+  .cat-list::-webkit-scrollbar-track { background: transparent; }
+  .cat-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+  .cat-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 1.25rem; cursor: pointer; font-size: 13px; font-weight: 400;
+    color: rgba(255,255,255,0.55); border-left: 3px solid transparent; transition: all 0.15s;
+  }
+  .cat-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+  .cat-item.active { color: #fff; font-weight: 600; border-left-color: var(--copper-lt); background: rgba(255,255,255,0.09); }
+  .cat-count { font-size: 10.5px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); padding: 2px 7px; border-radius: 20px; min-width: 24px; text-align: center; font-weight: 500; }
+  .cat-item.active .cat-count { background: var(--copper); color: #fff; }
+
+  .sidebar-bottom { padding: 1rem 1.25rem 1.25rem; border-top: 1px solid rgba(255,255,255,0.08); }
+  .add-btn-main {
+    width: 100%;
+    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-lt) 100%);
+    color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 0;
+    font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.02em; transition: opacity 0.15s;
+    box-shadow: 0 2px 10px rgba(157,84,28,0.4);
+  }
+  .add-btn-main:hover { opacity: 0.9; }
+
+  /* ── MAIN ── */
+  .main { margin-left: 270px; flex: 1; }
+  .topbar {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    padding: 1.1rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 5;
+    box-shadow: 0 1px 0 var(--border);
+  }
+  .topbar-left h1 { font-size: 18px; font-weight: 700; color: var(--navy); letter-spacing: -0.01em; }
+  .topbar-left p { font-size: 12.5px; color: var(--text2); margin-top: 1px; }
+  .topbar-right { display: flex; gap: 8px; align-items: center; }
+
+  .sync-status { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text3); margin-right: 4px; }
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #ccc; }
+  .sync-dot.ok { background: #4caf7d; }
+  .sync-dot.err { background: #e05252; }
+  .sync-dot.saving { background: var(--copper); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .view-toggle { display: flex; background: var(--off-white); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 2px; gap: 2px; }
+  .view-btn { background: none; border: none; cursor: pointer; padding: 5px 10px; border-radius: 4px; font-size: 13px; color: var(--text2); transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .view-btn.active { background: var(--navy); color: #fff; }
+
+  .sort-select {
+    background: var(--warm-white); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 7px 10px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text); outline: none; cursor: pointer;
+  }
+
+  .content { padding: 1.5rem 2rem 3rem; }
+
+  /* ── STATS ── */
+  .stats-row { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .stat-pill { background: var(--warm-white); border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; font-size: 12.5px; color: var(--text2); }
+  .stat-pill strong { color: var(--navy); font-weight: 700; }
+
+  /* ── CARDS ── */
+  .prompt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .prompt-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .prompt-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem;
+    transition: box-shadow 0.15s, border-color 0.15s;
+    position: relative; overflow: hidden;
+  }
+  .prompt-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(180deg, var(--copper) 0%, var(--copper-lt) 100%);
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .prompt-card:hover { border-color: var(--border2); box-shadow: 0 3px 16px rgba(29,54,79,0.08); }
+  .prompt-card:hover::before { opacity: 1; }
+
+  .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .card-title { font-size: 14.5px; font-weight: 700; color: var(--navy); line-height: 1.3; letter-spacing: -0.01em; }
+  .card-actions { display: flex; gap: 5px; flex-shrink: 0; opacity: 0; transition: opacity 0.15s; }
+  .prompt-card:hover .card-actions { opacity: 1; }
+
+  .act-btn {
+    background: var(--off-white); border: 1px solid var(--border); border-radius: 5px;
+    padding: 3px 9px; font-size: 11.5px; font-family: 'Inter', sans-serif;
+    cursor: pointer; color: var(--text2); transition: all 0.12s; white-space: nowrap; font-weight: 500;
+  }
+  .act-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .act-btn.copy-done { background: var(--olive); color: #fff; border-color: var(--olive); }
+  .act-btn.del:hover { background: #8B2E2E; color: #fff; border-color: #8B2E2E; }
+
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }
+  .tag { font-size: 10.5px; padding: 2px 8px; border-radius: 20px; font-weight: 600; letter-spacing: 0.02em; }
+  .tag-cat { background: rgba(29,54,79,0.1); color: var(--navy); }
+  .tag-teal { background: rgba(71,116,116,0.12); color: var(--teal); }
+  .tag-olive { background: rgba(136,150,94,0.13); color: #5a6830; }
+  .tag-kw { background: var(--off-white); color: var(--text2); border: 1px solid var(--border); }
+
+  .card-body { font-size: 12.5px; color: var(--text2); line-height: 1.7; white-space: pre-wrap; word-break: break-word; font-weight: 400; }
+  .card-body.clamped { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .expand-link { font-size: 11.5px; color: var(--copper); background: none; border: none; cursor: pointer; padding: 4px 0 0; font-family: 'Inter', sans-serif; font-weight: 600; }
+  .expand-link:hover { color: var(--copper-lt); }
+
+  .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .card-note { font-size: 11.5px; color: var(--text3); font-style: italic; flex: 1; line-height: 1.4; }
+  .card-date { font-size: 10.5px; color: var(--text3); white-space: nowrap; margin-left: 8px; font-weight: 500; }
+
+  /* ── EMPTY ── */
+  .empty { text-align: center; padding: 5rem 2rem; }
+  .empty-icon { font-size: 44px; margin-bottom: 1rem; opacity: 0.25; }
+  .empty h3 { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .empty p { font-size: 13.5px; color: var(--text2); }
+
+  /* ── MODAL ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(15,25,40,0.55); display: none; align-items: center; justify-content: center; z-index: 100; padding: 1rem; backdrop-filter: blur(3px); }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--warm-white); border-radius: 14px; border: 1px solid var(--border); padding: 2rem; width: 100%; max-width: 580px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.2s ease; }
+  @keyframes slideUp { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
+  .modal-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--copper), var(--copper-lt)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+  .modal-title { font-size: 20px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; }
+  .field { margin-bottom: 13px; }
+  .field label { display: block; font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 5px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .field input, .field select, .field textarea {
+    width: 100%; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 9px 12px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text); outline: none; transition: border-color 0.15s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(29,54,79,0.07); }
+  .field textarea { height: 190px; resize: vertical; line-height: 1.65; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+  .btn-cancel-modal { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 20px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text2); cursor: pointer; font-weight: 500; }
+  .btn-cancel-modal:hover { background: var(--off-white); }
+  .btn-save-modal { background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%); color: #fff; border: none; border-radius: var(--radius-sm); padding: 9px 24px; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(29,54,79,0.25); }
+  .btn-save-modal:hover { opacity: 0.9; }
+
+  /* ── CONFIRM ── */
+  .confirm-overlay { position: fixed; inset: 0; background: rgba(15,25,40,0.55); display: none; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
+  .confirm-overlay.open { display: flex; }
+  .confirm-box { background: var(--warm-white); border-radius: var(--radius); border: 1px solid var(--border); padding: 1.75rem 1.5rem; max-width: 340px; width: 100%; text-align: center; }
+  .confirm-box h3 { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 7px; }
+  .confirm-box p { font-size: 13px; color: var(--text2); margin-bottom: 1.25rem; }
+  .confirm-btns { display: flex; gap: 8px; justify-content: center; }
+  .btn-confirm-del { background: #8B2E2E; color: #fff; border: none; border-radius: var(--radius-sm); padding: 9px 22px; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+  .btn-confirm-cancel { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 22px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text2); cursor: pointer; }
+
+  /* ── TOAST ── */
+  .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--navy); color: #fff; border-radius: var(--radius-sm); padding: 11px 18px; font-size: 13.5px; font-weight: 500; z-index: 300; transform: translateY(80px); opacity: 0; transition: all 0.25s ease; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── LOADING ── */
+  .loading-screen { position: fixed; inset: 0; background: var(--navy); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
+  .loading-brand { font-size: 15px; font-weight: 800; color: #fff; letter-spacing: 0.08em; text-transform: uppercase; }
+  .loading-sub { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase; margin-top: -10px; }
+  .spinner { width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.15); border-top-color: var(--copper-lt); border-radius: 50%; animation: spin 0.8s linear infinite; margin-top: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── DIVIDER ── */
+  .topbar-divider { height: 4px; background: linear-gradient(90deg, var(--navy) 0%, var(--teal) 35%, var(--olive) 65%, var(--copper) 100%); }
+
+  /* ── MOBILE RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      flex-direction: column;
+    }
+    .cat-list {
+      max-height: 200px;
+    }
+    .layout {
+      flex-direction: column;
+    }
+    .main {
+      margin-left: 0;
+    }
+    .topbar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 1rem;
+      position: relative;
+    }
+    .topbar-right {
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .sort-select {
+      flex: 1;
+    }
+    .content {
+      padding: 1rem 1rem 3rem;
+    }
+    .prompt-grid {
+      grid-template-columns: 1fr;
+    }
+    .stats-row {
+      gap: 6px;
+    }
+    .card-actions {
+      opacity: 1;
+    }
+    .modal {
+      padding: 1.25rem;
+      max-height: 95vh;
+      border-radius: 14px 14px 0 0;
+    }
+    .modal-overlay {
+      align-items: flex-end;
+    }
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+    .field textarea {
+      height: 140px;
+    }
+    .sidebar-bottom {
+      padding: 0.75rem 1.25rem;
+    }
+    .topbar-accent {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .topbar-right {
+      flex-direction: column;
+    }
+    .view-toggle, .sort-select {
+      width: 100%;
+    }
+    .view-toggle {
+      justify-content: center;
+    }
+    .view-btn {
+      flex: 1;
+      text-align: center;
+    }
+    .sync-status {
+      margin-right: 0;
+    }
+    .stat-pill {
+      font-size: 11.5px;
+      padding: 4px 10px;
+    }
+    .toast {
+      bottom: 1rem;
+      right: 1rem;
+      left: 1rem;
+      text-align: center;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-brand">Triumph</div>
+  <div class="loading-sub">Business Solutions</div>
+  <div class="spinner"></div>
+</div>
+
+<div class="layout" style="display:none" id="appLayout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-row">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAShElEQVR42u1ceXBdZ3X/ne9ub5f0tFneHUVeINjZ4yQkmIQ4JO1AybANDHSgBfoHZQb6V6c0pS1/MNB2QmGmKVuaDmvSkIQUggk4C46d2HVsS3a8R7Jla7H09uXed5fv9I9779N7thRLsmynxd+MPH7Se/d+3++e8zvn/M6RgCvryrqyrqzLt+gttRE6d0Mc/MN/qE9HEEB0xYLOWYIA2WAWhkpIx1S0RBTWFP97tsdUrklYLqNoeXC8S29H6uV6KpKBpCFwy4oYb1gcRU9KRUtEga4SBAG6QnA88IFxCy8dr+C1Uya5kiEIYA6+/j9YkAh4JTxMeLD3rE7w+65JoTOuwmPA9RieZHgMKASczDvYerSMw2dqVKp5cCXOsSBB/rWY/w8CFPLKdJv/s1vSvHlNAhWb4XgMCniocTNFS4LBiGkCDKBqS2QqHk7kbBwcr+HIRI0qtjzvvd5yAFGw4ZBf1i+OcHdSxVjRRc70aOOKGH/42lbkqt6bErQiCATAYw7InKAIQBUEj4HJsot9IxZeOF6mwYw9ZVEL7Hp0sYi3J6XhgfUp3rgiBlUQXMmwPYZCVLeamRYDkJIhgjdJAALNB9cUgqESai5j93AVzxwo0YmcPW0AeEtZUFwXuG9dkjevSSKuC1RtWT8gBU/4zcCR7B8+ohJsj8HB66ojmzYbcg8RENMELFfiucNlPDVQIMvlBQOJFgrlZETBXX0Jvm9dEumogmLNgyf9pzmbFSaEcUNgouxi22AF+0ctuBJ0+6oY33V1AjWPp92wJxlEhLguMJS18R+7cnR0orYgINFCgMMAOhMqbl4e46s7dCxp0dAWVWa0lLN5gpmhKgRDFdh6tIwn+wuUM72mz3z+jg6+dUUMFVs2gd5ocQw/PbA9xqO7cthyqERvORcDgNtWxvkTN7ZCV6luRaFLCPKJVlUAhfxDCQLKNYlHdubw8mCFAKCv08DdfQluiyn4/itZaokq+Lt7u9m0ZRPwp/IO+kctjBVdpCICy9o0LG3RsCqt46U3Kvjh7jzVHDlv4lYXysUoAOGj17XyvWuScCVDSp+TTEdCISCqC1QdiTNlF+MlF+NlF5myC4+BoxM1GszaMFTCB97RwpvXJKEpfjJ5bCLOzx0pkzsNuS9v09AeV7F/1MKWwyX69aESAKA9rmB9T5TXdhncP2LSfOu5hQEo8PVP35Lm965NomB6APnlw++OlrFxRQy2x3h6fx57Tps0VnRhT1M2xHWBP9+Y5rv7EihaEsWaB1UQMlUPPSmNDZVg1/gcF4vrhE1Xx3Fnb5x3DVfxsz0FGi06eP5YmRpp4LK4WEiEH7q2hT+4vgV503eBhCHw2N4Cnhoo0N19CT4yUaPhvNMEKjX8349IhPaYguVtGt/Zm8CGxRFIZnztdxP00etaubddR82dPkWQ7F8vrguUbImfvJbHC8fKFF77snBQCM6Ny6L8V5s6UbYlmP1NPn+sjO+9kiVFAJ5sLg3o7Lpshix4aauGm5fH+LaVMaxo05GpulDPExY9BlThh/6n9xfx0z15upBoJi7UrXpSGv7yjg6YjoTtMjSFkKm4eHRXjgBAyilJI9yk5Kkvj6fACa1qTZeBv7itnZmBn/cX6N9eztC+ERMtEeW8JYVC/j1LNYkPrE/h4ze0seTZpxsLZkHhYd67LsVSMkxH4oMbWpEwCKbD+OZLkzRadFC1JVzZ7EqtUQWdcRVtMYW7kyoOn6nRkYa8JWEIPPQnizmiEl45YeJne/M0UXbx/mtS/MD6Fkj2C9fzHdpjoDUi8MjOHH59qDQvS7ogFwvdZ1FKxV/f3cUtEQV2EGlShsCLxyv4/qtZsoPM1mPg1pUx/sIdHVAVgulIbD1axlMDRSqEeQ/54f+r93fzoqQGTfHLiWcOFPHkQIHWdhn8hTs6kIgIWM70IHEDMRP8tOIrW8ZpKGvPOXm8IAtiBpa0aHjw3m6OqgTL9e+cNAR2nqzi33dkqRokdpL9wvVj17dh2xsVZKsujkzYNFlxp0KqAFwJLG/T8ZV7uzh0QSUg/QNjNXzr95MkCPibe7q5K6HAPAskDgCR7KcZDCCmEQ6M1fC1rWdorlU/zdsvCYhqAg9u7uYlLSqqDkMASEYEnj9WwXd3ZCj0fWY/075lRYxfPF6houU1EX1jdt0aVfCld3XwynRzxPKkX4aUax4eenESw3mHvnr/Im6PKQhrr/B6o0UX6ZiChCFQdbge3b6+dQL7Rsw5uZq4EOv55I1tvKJNQ9X2wYlqhN8cLuM72zPUGOUYQMWWeOZAkYqWB4X8n4Xghe+5fVWc/3ZzF69q12GdFc4V4V/DUAW+fE8XrumJ8N9vGSfLZWiCmvKcZETgmQMlDOcdpAwBTzIYwD1rElN138WKYuGhb14e4zt74yjV/LwnpgvsGjbxg1ezxA2RKqoJ6AqhYvvVOAXkGb6HAdy0PMYPbu7mz92aRldCPcdtGiOU4zEsl/HFd3VgbZfB//zCBBka1U/tSiAdVXD7qhi++dIk7Rux0BZVUKl5WNdloCelnVdRmLeLUYPA/o/3LeLOhArLZegKYHuMoxM2WqMKJsouDJXQlVCRtzw89OIkVQP1r5FAV6Z1fOz6Vn7boggAYKzooGJLrErrvtQxwwbDAyYMgX96fhKr0ho+uKEFecsvaTwJtMUEfnukgu/syNCXNnXy9UsjAAg/2p3DswdnH9HEnF0LwF19CV7SoqHmMloiviTqeIwnBwpUtDy8uy+Btd0Gjmds/OeuXF0a5YZrXNWu48v3dPHbF0VQtSWqtkRHXIUmCNuHqtAUmnFzoYtXahKff2c7zpQ9DGZtv6Jn3x1zpsRdfXHctDzG//LCBO07bSGqEdZ0GXNyMzEX6wld5t19CTCAiEb45esl/Hh3HumYCkUQvvH8BG0fquB7r2Tx8PZMvbzgswrbjrjKEVWgVJN1PrI9xsp2HRGV8OPX8jA0mjHi1BNPAh5Yn8JQ1qm/Dg9mOYyPXteKiCbw7W0ZOj5po6/DgB4ASQsKUHC165dGuK/DwFDWxtd+N4Gf7snTnb1xRFTChsURBoBnD5YQ08S0DcJQ9th1skrjZQfRBhAE+Rnw7atiyJseHt9bQDIiZnQFIsB2GS0RBeu6DVjOlFZEBNQ8xuKUik29cTYdiW/9fpJ0lbAooc6aYGYNUHiI+9al8MLxMr763Bk6OG7R525L8+pOAznTw6beBHTFF9s/e2san7o5zVe161OEzEBbVMH1S6P8ketauWBKmE6zACYAmA7jj9+Wwq8Olmg470BXaEaXEAQ4kpE0/GDQaHHCbz5i09VxGCphOO/g6f1FLGnVeLYErM4lrPd26Ng/auGne/IEADcti/FtK/1IBgAtUYEvvquDI5rAc0fKaIsp+Nxt7Zw3PfSPmBgYtWi06OLYZI1qLnN7XMHKtNZkIeGTX96mIRUR2HKohM9sTMO2Zhb6Q/efbt81l7G0Vce67gjvGzFp65EypePqrHlodnpQcKW8KevgaArhfdek4AU7E8Fm+joNfH3rBB2ZqNW7D2u7DN64Iob3rE5yVPOTvagm0BL1y4XprFVXCL3tBu8+ZdLHHea5FJthndioItywNIq9p02YrsSpvD3rPpo6B3yQqbj15O7aJVHubddRbigl4rrAruEqjkzUoArUi8qBUYsGRi2kIgpuWBrld/fF0RFX/QTzTQ7eHlew86SHTMVFR1w9b7soBMN0/BQhoQvYnt9uWt1lQFOCltPFiGKNPutnvbFzbiKZEVFFPWELRawwShUtDwOjFoUueT6jsIPDnM1Tb7YkA7pK2Hq0jLItoQr/IXXGFfQk1aaAc1Ey6VCO8NW9KQGdyO+vL06pSBoKFDHVaQgLyI9c18rfeF8Pb+iJntcaXMkYLbjgoMvKc9hfyhBQBeHxvXnEdQHXY0Q0USfniyaYhQda1qpxS0SBJxtkUwCO9IvN91+TYlUAG1fEOST4z9zazh/a0AJXst8EpJndWRNAturhjUyN4rpAKqL4XEezs3LTYdy0LIqXB6t0cLyGqCaAoGC+JIpid1KFOk3oDZO9e9cmcP+6FEc0wubVSU7HVGxcEUW26jVV8NNagPST0f8ZNmG5jNWdBrdGBFw5u7BMQdjvSqpoiyl4or8AVSFIoK5IXvSuRktEaSK6s4Xxmst4YH0Kr4/X0J1QceOyKNfc8yuAfpsZyFQ9/Oqg3/S7szcOorn1JcJ29VXtOr96okrDOZuv7jCgzEN3nZcFaQo1kaztntsSthzGui4DSUPU65/ZRMuoJvCj1/LIVFy8oyfCNyyNomrLOWvKBKAzyHf2nLaCQQd5cQEK91i1ud7mPZV3MJi1oat0bsLn+u+ruTw7co0IPL6vgO2DFUpFFPzpTW3z6mdxg+oAAPvHLLiSUbQuMkDhjScrLjzpdzBeHqrCCcZaZiL184XVEJynBor4eX+BFEH47K1p7klpM/bBZhfR/B2PFBzKmx7OlN1LA9CpgkO2x6jYEntOmRTVBCTzvPTbcFbx5/3Fepb+6Zvb+Ial0XoSOpu297SWHmTpFVviVMHB6bxDc1UU50TSIRGPFR1kKx5sjzFZcaeq9DkqcCE4/7WvgCf6CwQAn7ypje9enUAhEL/OlzVXbAnHA9qiAm5DJiAZyDY0BA6M1eoWNBfRft6S675Rqx62/fYLzctyfnGgWAfnw9e28v3rkijOApwwUo2VXAyMmjBU0SSbWI7ESNGt9+Z3DFXJlXO3cjFfAtwxVKHwiZwpu+e4guSZn1RYt+0YquInr/lutXlNkh9Yn0LRml3ECrPzsaKL/aM1CNEMXDhBgkDtPBmM582V9OecB4WHHso6iKgmAGAwazeN+WoKYTBroz1ovTRGt7BSHy+5+MHOLAHA2xdF+BM3ttYbAHOx5qGsjVMFmxyPOezz6wrh9fEawrnqC5kym3dv3pOM18csAvzZnnDyi4MG4BsZG1VHnlNHcZBHPbY3j3JNIq4LfOrmtrrFzRYfCqr2Q2dqVKpJXxkQQcnjMV45UV2Q4TBxIR8OSflMycVgxh9+kswQgvBGxkam4s/3hAgx+zr2kYkadp70D/BHb0vx0lZtxjZyvYtx1mtD8RXCkaIDT/oVPwKd/PBEDccmazMKaZcMoMZOx7bBSn00hQLtaDBrQxUNU/YANEF46XgFMige7+qLo2JLKOLNM/emCBV8b+fJar0jG+o8ggj/faA0p97XRQUoLLJfPVGlk3kHhkJhQ5D6RywKB8lC18uZHvaNmAQAm3rj3BJRMFMFwEEX5ZkDRWQqrl8gB/M/edPDtmCe0ZMMWzIShoJdJ6vYN2ISLdAYsFgIPw3LiqcHitBVP2mMaYKPZ2xMlF1owcG0oDTJVj3oCuHGZTHUXJ52E5KBRETgh7tz+OXrRUrHfMkjuDa2DVaRq071+CMqoWh5+NHu/MIOxy/ERcIhhe1DFdp1soqk4UcvTzJ2nzIRUQmeZKiCcLrg98lWpXUsSk0vo3pBjvRkfxHPHixRb4fBcd2XPFSFkDc9PHuwWP+YphBShoJHduYw2SALv2UAaiTsR3flKGd66ElpAIDnj5ap2iCZhvPPV3XoPF07xwsUwa1Hy3hsb56IgN52vf7rDHHdH63LVj2I4KJdCRW/PFjCy4MVWshfQ1hYgAJSzJkevr1tEktbNRABw3kHr56oIq4LeOxLI4A/V8TTWGJMIxw6U8MjO3P1Acy13QZsz+997T1t4TeHyz4QARJjJRdPDRRoIaLWRQOoTtgE7B426beHS0jo/uWf3l+kUEAPo1VrVGlOIAMSr9iMh7dnyA2Yvj2mYGVaBwHIVT1895UMSeZ67eeXOnJeWfIlB6jRkvpHLQqr8fGSi6f3FxHXBeIBaKporhrDiPXY3jzGSwGxA9iwJModcX9I6l9/n6FMxVtQjrnkADUmduFwlCBgy6ES7T1t4eoOY6qlE/66E/vDV/vHLLxwzHefsCF5d18ClsN46MVJHJusYaE55rIAdLa5h735h7dnKB1ToArCaKG5wCUAv9hfDAD1c6l3ropzd1LFP/xmnF4ft+hSg3NRATrbogQBpwsOnugvoq/T4IFRK/gZI6L6pcmBMYsosJ7WqD+x8eCz43Rs0sblAGfeXY0LIfAdQxVqi/qcMl5yOWkIqAphz2kLMhh+8thvFj66K0e2x5cNnEtmQWdzU870YDoSvz1SRkwXsF3GG5nmgYJMxa3PXMvL+GcXxKW+YTiGRwRsOVyioxM2NIUwWXGb9GI6S3/6gwGo8dCOx3h4R4aKlgdVzEzyf7ArLKbWdBnoDcL/W/nveFxWkK6sKyBdWVfWlXVlzXn9LyyemRxVUOuGAAAAAElFTkSuQmCC" style="width:36px;height:36px;object-fit:contain;flex-shrink:0;" />
+        <div class="brand-text">
+          <div class="brand-name">Triumph</div>
+          <div class="brand-sub">Business Solutions</div>
+        </div>
+      </div>
+      <div class="library-label">Prompt Library</div>
+    </div>
+    <div class="sidebar-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search" placeholder="Search prompts..." oninput="applyFilters()" />
+    </div>
+    <div class="sidebar-section">Categories</div>
+    <div class="cat-list" id="catList"></div>
+    <div class="sidebar-bottom">
+      <button class="add-btn-main" onclick="openModal()">+ New Prompt</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar-divider"></div>
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="pageTitle">All Prompts</h1>
+        <p id="pageSubtitle"></p>
+      </div>
+      <div class="topbar-right">
+        <div class="sync-status"><span class="sync-dot" id="syncDot"></span><span id="syncLabel">Connecting...</span></div>
+        <select class="sort-select" onchange="applyFilters()">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="alpha">A → Z</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn active" id="vGrid" onclick="setView('grid')">⊞ Grid</button>
+          <button class="view-btn" id="vList" onclick="setView('list')">☰ List</button>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="stats-row" id="statsRow"></div>
+      <div id="promptContainer"></div>
+    </div>
+  </main>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon">📝</div>
+      <div class="modal-title" id="modalTitle">New Prompt</div>
+    </div>
+    <div class="field"><label>Prompt Title *</label><input type="text" id="fTitle" placeholder="e.g. LinkedIn post — service launch" /></div>
+    <div class="field-row">
+      <div class="field">
+        <label>Category</label>
+        <select id="fCat" onchange="toggleCustomCat()">
+          <option>Triumph Business Solutions</option>
+          <option>Social Media</option>
+          <option>LinkedIn</option>
+          <option>Google Business Profile</option>
+          <option>Facebook</option>
+          <option>Instagram</option>
+          <option>Marketing</option>
+          <option>Sales</option>
+          <option>Customer Service</option>
+          <option>Email</option>
+          <option>Operations</option>
+          <option>Clipart / Creative</option>
+          <option>General</option>
+          <option>Custom...</option>
+        </select>
+      </div>
+      <div class="field"><label>Tags (comma separated)</label><input type="text" id="fTags" placeholder="social, B2B, client" /></div>
+    </div>
+    <div class="field" id="customCatField" style="display:none"><label>Custom Category</label><input type="text" id="fCustomCat" /></div>
+    <div class="field"><label>Prompt *</label><textarea id="fPrompt" placeholder="Paste your full prompt here. No length limit — detailed prompts welcome."></textarea></div>
+    <div class="field"><label>Notes / When to use</label><input type="text" id="fNotes" placeholder="e.g. Use for first-contact emails with SME prospects" /></div>
+    <div class="modal-btns">
+      <button class="btn-cancel-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-save-modal" onclick="savePrompt()">Save Prompt</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3>Delete this prompt?</h3>
+    <p>This action cannot be undone.</p>
+    <div class="confirm-btns">
+      <button class="btn-confirm-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-confirm-del" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzB8U1jVHfLScWvaExUCFBZa2Y5UB9fyYrrhGzAsYDZDEpa1nLK7w-s_nk_g1YUeonR/exec';
+
+const SEED_PROMPTS = [
+  {
+    "id": "seed-1",
+    "title": "Social Media Master Prompt",
+    "category": "Social Media",
+    "tags": "master, platform-specific, client content, all platforms",
+    "notes": "Complete the required sections. Comprehensive prompt for generating platform-specific social content for clients",
+    "created": 1777585482699,
+    "prompt": "You are a digital marketing content specialist for Triumph Business Solutions, a marketing and business consultancy. Your job is to create platform-specific social media content for our clients.\n\nCLIENT DETAILS:\n- Business Name: [CLIENT BUSINESS NAME]\n- Industry: [INDUSTRY]\n- Target Audience: [TARGET AUDIENCE]\n- Key Products/Services: [PRODUCTS/SERVICES]\n- Brand Voice/Tone: [BRAND VOICE - e.g. professional, friendly, authoritative]\n- Location: [CITY/REGION]\n\nCONTENT REQUIREMENTS:\nPlatform: [PLATFORM - Facebook / Instagram / LinkedIn / Google Business Profile]\nPost Type: [PROMOTIONAL / EDUCATIONAL / ENGAGEMENT / BEHIND THE SCENES / TESTIMONIAL]\nTopic/Theme: [SPECIFIC TOPIC OR CAMPAIGN]\n\nPLATFORM-SPECIFIC GUIDELINES:\n\nFACEBOOK:\n- Length: 40-80 words optimal, max 400 words\n- Conversational, community-focused tone\n- 1 clear call-to-action\n- 3-5 relevant hashtags maximum\n\nINSTAGRAM:\n- Caption: 138-150 characters for non-truncated display\n- Storytelling approach - hook in first line\n- 10-30 hashtags\n- Moderate and relevant emoji usage\n\nLINKEDIN:\n- Length: 150-300 words\n- Professional but personable tone\n- Compelling hook to open\n- 3-5 professional hashtags\n- End with question or CTA\n\nGOOGLE BUSINESS PROFILE:\n- Length: 100-300 words\n- Local SEO keywords naturally included\n- Business location references\n- Direct CTA with contact info\n\nOUTPUT FORMAT:\nPost ready to publish, then:\n✅ Character count\n📌 Suggested posting time\n🖼️ Image/visual recommendation\n#️⃣ Hashtag set"
+  },
+  {
+    "id": "seed-2",
+    "title": "Client LinkedIn Post Prompt",
+    "category": "LinkedIn",
+    "tags": "LinkedIn, client, professional, engagement",
+    "notes": "Standard LinkedIn post generator for client businesses",
+    "created": 1777671882699,
+    "prompt": "Create a LinkedIn post for my client with the following details:\n\nBusiness: [BUSINESS NAME]\nIndustry: [INDUSTRY]\nTopic: [POST TOPIC]\nGoal: [BRAND AWARENESS / LEAD GENERATION / THOUGHT LEADERSHIP / RECRUITMENT]\nAudience: [TARGET AUDIENCE]\nTone: [PROFESSIONAL / CONVERSATIONAL / INSPIRATIONAL]\n\nPOST STRUCTURE:\n1. Hook (first 1-2 lines - must compel reader to click \"see more\")\n2. Body (main value, story, or insight - 3-5 short paragraphs)\n3. Key takeaway or lesson\n4. Engagement question or CTA\n5. Hashtags (3-5 relevant, mix of broad and niche)\n\nREQUIREMENTS:\n- 150-300 words total\n- Short paragraphs for mobile readability\n- No buzzwords or corporate cliches\n- Write in first person as the business owner\n- Human and relatable, not AI-generated\n- Include a specific detail or example\n\nProvide TWO versions: one more professional, one more conversational."
+  },
+  {
+    "id": "seed-3",
+    "title": "Client LinkedIn Master Prompt - edit client details",
+    "category": "LinkedIn",
+    "tags": "LinkedIn, master, detailed, client, comprehensive",
+    "notes": "Fill in every CLIENT BRIEF field, then paste into AI model. You'll receive 3 post options plus a recommendation on which to use. The more specific your brief — especially the audience field and the post topic — the sharper the output. Vague briefs produce vague posts.",
+    "created": 1777758282699,
+    "prompt": "You are a specialist LinkedIn content writer working on behalf of a digital marketing agency. Your job is to write high-performing LinkedIn posts for the agency's clients. Each post must sound like it comes directly from the business owner — not from a marketing agency, and not from a template.\n\nRead the CLIENT BRIEF carefully before writing anything.\n\n══════════════════════════════════════════════\nCLIENT BRIEF — complete all fields before use\n══════════════════════════════════════════════\n\nBusiness name:\n[e.g. Harris & Co Accounting / Align Physiotherapy / Apex Electrical]\n\nIndustry:\n[e.g. Accounting & finance / Allied health & wellness / Electrical — commercial trades]\n\nBusiness owner / author name:\n[First name or full name.]\n\nLocation:\n[e.g. Brisbane, QLD / Melbourne, VIC / Australia-wide]\n\nWhat they do:\n[2–3 sentences in plain English. Core service + who they help + what outcome they deliver.]\n\nTheir LinkedIn audience:\n[Be specific. Who is following or finding this page?]\n\nBrand tone:\n[e.g. Calm and authoritative / Warm and knowledgeable / Direct and no-nonsense]\n\nPost topic:\n[The specific subject this post is about.]\n\nPost format:\n[Choose one: Expert insight / Myth-busting / Reframe / Story beat / List insight / Education post / Standards & process]\n\nAny specific details to include:\n[Optional — e.g. a relevant stat, a credential, a seasonal hook]\n\nDesired call to action:\n[e.g. Ask a question to drive comments / Soft mention of a service / Invite a DM]\n\n══════════════════════════════════════════════\nLINKEDIN POST RULES\n══════════════════════════════════════════════\n\n- Write in first person from the business owner's perspective\n- Line 1 is the hook — must stand alone and stop the scroll\n- Short paragraphs, one idea each, white space throughout\n- 150–300 words. Not shorter, not longer.\n- No bold, no italics, no decorative em dashes\n- Remove: \"passionate about\", \"excited to share\", \"game-changer\", \"in today's fast-paced world\"\n- 3–5 hashtags at the very end on their own line\n\n══════════════════════════════════════════════\nOUTPUT INSTRUCTIONS\n══════════════════════════════════════════════\n\nWrite exactly 3 LinkedIn post options:\n\nOPTION 1 — Direct declarative statement. Lead with the insight immediately.\nOPTION 2 — Question or scenario that puts the reader in the situation first.\nOPTION 3 — Counterintuitive or uncomfortable truth that challenges an assumption.\n\nAfter all 3, add a RECOMMENDATION (2–3 sentences) on which performs best for this client and why."
+  },
+  {
+    "id": "seed-4",
+    "title": "Client Google Business Profile Post Prompt",
+    "category": "Google Business Profile",
+    "tags": "Google, GBP, local SEO, client, maps",
+    "notes": "Complete every field in the CLIENT BRIEF, then paste into Claude. The more specific your location, SEO phrases, and target customer description, the stronger the output.",
+    "created": 1777844682699,
+    "prompt": "You are an SEO-informed copywriter creating Google Business Profile (GBP) posts for client businesses managed by a digital marketing agency.\n\nGBP posts appear directly in Google Search and Google Maps. Readers are high-intent, time-poor, making a fast decision. Every word must earn its place.\n\n══════════════════════════════════════════════\nCLIENT BRIEF — complete all fields before use\n══════════════════════════════════════════════\n\nBusiness name:\n[e.g. Castillo Plumbing / Bloom Health Studio / Harris & Co Accounting]\n\nIndustry:\n[e.g. Trades & home services / Health & wellness / Accounting & finance]\n\nLocation — suburb and city:\n[Be specific. e.g. Chermside, Brisbane QLD / Southport, Gold Coast QLD]\n\nService area:\n[e.g. North Brisbane and surrounds / Greater Brisbane / Australia-wide]\n\nWhat they do:\n[1–2 sentences. Core service + who they help. Plain English.]\n\nTarget customer searching on Google:\n[Who is finding this business via search? Be specific.]\n\nPost type:\n[Choose one: What's new / Educational tip / Trust builder / Offer or promotion / Seasonal or timely]\n\nService or topic to highlight:\n[e.g. \"Hot water system replacement\" / \"Initial physiotherapy assessment\"]\n\nLocal SEO keyword phrases to include naturally:\n[List 2–4 phrases the client wants to rank for.]\n\nCall to action:\n[One specific action only. e.g. \"Call us today\" / \"Book your free consultation online\"]\n\nSpecific details to include:\n[Optional — years in business, licence number, a credential, a result, opening hours]\n\n══════════════════════════════════════════════\nGBP FORMATTING RULES\n══════════════════════════════════════════════\n\n- Plain paragraphs only — no bullet points, no numbered lists\n- No bold, no italics, no markdown, no hashtags, no emojis\n- 150–300 words per post — hard limit\n- First sentence states the benefit, problem, or service — never open with the business name\n- SEO phrases woven in naturally — never forced or repeated\n- Mention suburb or city at least once\n- End with the exact CTA specified\n\n══════════════════════════════════════════════\nOUTPUT INSTRUCTIONS\n══════════════════════════════════════════════\n\nWrite exactly 3 GBP post options:\n\nGBP POST — OPTION 1 — Empathy-first: Open with the customer's situation or frustration.\nGBP POST — OPTION 2 — Solution-first: Open directly with the service and what it delivers.\nGBP POST — OPTION 3 — Authority-first: Open with a credibility signal — experience, process, local presence.\n\nAfter all 3, add a RECOMMENDATION (2–3 sentences) on which option performs best for this post type and why."
+  },
+  {
+    "id": "seed-5",
+    "title": "TBS LinkedIn Post Prompt — Ready to Use",
+    "category": "LinkedIn",
+    "tags": "LinkedIn, ready-to-use, TBS, fast, publish-ready",
+    "notes": "Only change the Post topic and Post format fields. Reframe | Expert insight | Myth-busting | Story beat | Direct opinion",
+    "created": 1777931082699,
+    "prompt": "You are a specialist LinkedIn content writer. Your job is to write high-performing LinkedIn posts for Triumph Business Solutions. Each post must sound like it comes directly from the business owner.\n\n══════════════════════════════════════════════\nCLIENT BRIEF\n══════════════════════════════════════════════\n\nBusiness name: Triumph Business Solutions\nIndustry: Digital marketing & web services — website design, SEO, social media content management, and design & print for service-based small businesses\nBusiness owner / author name: [Your first name]\nLocation: Cashmere, north Brisbane, Queensland — serving clients across Brisbane and Australia-wide\nWhat they do: Triumph Business Solutions helps service-based small businesses build strong, sustainable digital foundations — website design, SEO, social media content, and design & print that work together as one system. Run personally by a single expert who deals with every client directly. Long-term thinking over quick fixes.\nTheir LinkedIn audience: Small and medium business owners — trades, consultants, health professionals, local service providers — struggling with inconsistent online presence, wasting money on tactics that don't work, or unsure whether their website and marketing are actually doing anything. Skeptical of agencies, time-poor, respond to honesty and expertise.\nBrand tone: Direct, plain-spoken, and quietly authoritative. No buzzwords, no vague optimism, no marketing fluff.\n\nPost topic:\n[INSERT TOPIC HERE]\n\nPost format:\n[INSERT FORMAT HERE — choose one: Expert insight / Myth-busting / Reframe / Story beat / List insight / Direct opinion]\n\nSpecific details to include:\n[OPTIONAL — leave blank if not needed]\n\nDesired call to action: Either a thought-provoking question to invite comments, or a natural mention of how Triumph helps — never a hard sell.\n\n══════════════════════════════════════════════\nLINKEDIN POST RULES\n══════════════════════════════════════════════\n\n- First person from the business owner's perspective\n- Remove: \"passionate about\", \"excited to share\", \"game-changer\", \"in today's fast-paced world\"\n- Line 1 is the hook — stands alone, stops the scroll\n- Short single-sentence paragraphs, white space throughout\n- 150–300 words\n- No bold, no italics, no decorative em dashes\n- 3–5 hashtags at the very end: #DigitalMarketing #SmallBusinessAustralia #BrisbaneMarketing #WebsiteDesign #SEO #QueenslandBusiness\n\n══════════════════════════════════════════════\nOUTPUT INSTRUCTIONS\n══════════════════════════════════════════════\n\nWrite exactly 3 LinkedIn post options:\nOPTION 1 — Direct declarative statement.\nOPTION 2 — Question or scenario putting the reader in the situation.\nOPTION 3 — Counterintuitive or uncomfortable truth.\n\nAfter all 3, add a RECOMMENDATION (2–3 sentences) — which option performs best and why."
+  },
+  {
+    "id": "seed-6",
+    "title": "Google Business Profile Prompt (TBS) — Ready to Use",
+    "category": "Google Business Profile",
+    "tags": "Google, GBP, ready-to-use, local SEO, TBS",
+    "notes": "Update Post type and Service or topic to highlight only. All other fields are pre-filled for Triumph Business Solutions.",
+    "created": 1778017482699,
+    "prompt": "You are an SEO-informed copywriter creating Google Business Profile posts for Triumph Business Solutions.\n\nGBP posts appear in Google Search and Maps. Readers are high-intent, time-poor, making a fast decision.\n\n══════════════════════════════════════════════\nCLIENT BRIEF\n══════════════════════════════════════════════\n\nBusiness name: Triumph Business Solutions\nIndustry: Digital marketing and web services — website design, SEO, social media content management, and design & print for service-based small businesses\nLocation: Cashmere, north Brisbane, Queensland\nService area: North Brisbane and surrounds — in-person meetings available. Also serves clients across Australia remotely.\nWhat they do: Triumph Business Solutions helps service-based small businesses build a strong integrated online presence. Run personally by a single expert — no outsourcing, no being passed between staff. Focus on long-term digital foundations that generate consistent visibility and enquiries.\nTarget customer: Small business owners in Brisbane and Queensland searching for affordable, reliable digital marketing — website design, social media management, or SEO. Frustrated with inconsistent results, looking for someone local they can actually talk to and trust.\n\nPost type:\n[INSERT POST TYPE HERE — choose one: What's new / Educational tip / Trust builder / Offer or promotion / Seasonal or timely]\n\nService or topic to highlight:\n[INSERT TOPIC HERE]\n\nLocal SEO keywords: Brisbane digital marketing agency, social media management Brisbane, website design Brisbane small business, north Brisbane marketing, SEO Brisbane small business, digital marketing Queensland\n\nCall to action: Call or message Triumph Business Solutions today to start the conversation.\n\nSpecific details:\n[OPTIONAL — in-person meetings available north Brisbane, one-on-one personal service, no lock-in contracts. Add anything timely or relevant.]\n\n══════════════════════════════════════════════\nGBP FORMATTING RULES\n══════════════════════════════════════════════\n\n- Plain paragraphs only — no bullets, no bold, no hashtags, no emojis\n- 150–300 words — hard limit\n- First sentence states benefit, problem, or service — never open with business name\n- SEO phrases woven in naturally\n- Mention Cashmere, north Brisbane, or Brisbane at least once\n- End with: Call or message Triumph Business Solutions today to start the conversation.\n\n══════════════════════════════════════════════\nOUTPUT INSTRUCTIONS\n══════════════════════════════════════════════\n\nWrite exactly 3 GBP post options:\nGBP POST — OPTION 1 — Empathy-first\nGBP POST — OPTION 2 — Solution-first\nGBP POST — OPTION 3 — Authority-first\n\nAfter all 3, add a RECOMMENDATION (2–3 sentences)."
+  }
+];
+
+let prompts = [], activeCategory = 'all', currentView = 'grid', editId = null, deleteId = null;
+
+async function fetchPrompts() {
+  setSyncStatus('saving');
+  try {
+    const r = await fetch(SCRIPT_URL);
+    if (!r.ok) throw new Error();
+    const data = await r.json();
+    prompts = Array.isArray(data) ? data.filter(p => p && p.title) : [];
+    if (prompts.length === 0) {
+      prompts = SEED_PROMPTS;
+      await pushPrompts(false);
+    }
+    setSyncStatus('ok');
+  } catch(e) {
+    setSyncStatus('err');
+    prompts = SEED_PROMPTS;
+  }
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('appLayout').style.display = 'flex';
+  render();
+}
+
+async function pushPrompts(toast = true) {
+  setSyncStatus('saving');
+  try {
+    const r = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(prompts)
+    });
+    if (!r.ok) throw new Error();
+    setSyncStatus('ok');
+    if (toast) showToast('Saved ✓');
+  } catch(e) {
+    setSyncStatus('err');
+    if (toast) showToast('Save failed — check connection');
+  }
+}
+
+function setSyncStatus(s) {
+  document.getElementById('syncDot').className = 'sync-dot ' + s;
+  document.getElementById('syncLabel').textContent = s==='ok'?'Synced':s==='saving'?'Saving...':'Offline';
+}
+
+const CATEGORIES = ['Triumph Business Solutions','Social Media','LinkedIn','Google Business Profile','Facebook','Instagram','Marketing','Sales','Customer Service','Email','Operations','Clipart / Creative','General'];
+
+// Tag colour rotation
+const TAG_CLASSES = ['tag-teal','tag-olive','tag-kw','tag-kw','tag-kw'];
+
+async function fetchPrompts() {
+  setSyncStatus('saving');
+  try {
+    const r = await fetch(BASE + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+    if (!r.ok) throw new Error();
+    const data = await r.json();
+    let rec = data.record;
+    prompts = Array.isArray(rec) ? rec : (Array.isArray(rec?.prompts) ? rec.prompts : []);
+    if (prompts.length === 0) { prompts = SEED_PROMPTS; await pushPrompts(false); }
+    setSyncStatus('ok');
+  } catch(e) { setSyncStatus('err'); prompts = SEED_PROMPTS; }
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('appLayout').style.display = 'flex';
+  render();
+}
+
+async function pushPrompts(toast = true) {
+  setSyncStatus('saving');
+  try {
+    const r = await fetch(BASE, { method: 'PUT', headers: HEADERS, body: JSON.stringify(prompts) });
+    if (!r.ok) throw new Error();
+    setSyncStatus('ok');
+    if (toast) showToast('Saved ✓');
+  } catch(e) { setSyncStatus('err'); if (toast) showToast('Save failed — check connection'); }
+}
+
+function setSyncStatus(s) {
+  document.getElementById('syncDot').className = 'sync-dot ' + s;
+  document.getElementById('syncLabel').textContent = s==='ok'?'Synced':s==='saving'?'Saving...':'Offline';
+}
+
+function render() { renderSidebar(); renderMain(); }
+
+function renderSidebar() {
+  const cats = {};
+  prompts.forEach(p => { cats[p.category] = (cats[p.category]||0)+1; });
+  let html = `<div class="cat-item ${activeCategory==='all'?'active':''}" onclick="setCategory('all')">
+    <span>All prompts</span><span class="cat-count">${prompts.length}</span></div>`;
+  [...new Set([...CATEGORIES,...Object.keys(cats)])].forEach(cat => {
+    if (!(cats[cat]||0)) return;
+    const s = cat.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    html += `<div class="cat-item ${activeCategory===cat?'active':''}" onclick="setCategory('${s}')">
+      <span>${esc(cat)}</span><span class="cat-count">${cats[cat]}</span></div>`;
+  });
+  document.getElementById('catList').innerHTML = html;
+}
+
+function renderMain() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const sortVal = document.querySelector('.sort-select').value;
+  let filtered = prompts.filter(p => {
+    const inCat = activeCategory==='all' || p.category===activeCategory;
+    const inQ = !q || [p.title,p.prompt,p.tags,p.notes].some(f=>(f||'').toLowerCase().includes(q));
+    return inCat && inQ;
+  });
+  if (sortVal==='newest') filtered.sort((a,b)=>b.created-a.created);
+  else if (sortVal==='oldest') filtered.sort((a,b)=>a.created-b.created);
+  else filtered.sort((a,b)=>a.title.localeCompare(b.title));
+
+  document.getElementById('pageTitle').textContent = activeCategory==='all'?'All Prompts':activeCategory;
+  document.getElementById('pageSubtitle').textContent = `${filtered.length} prompt${filtered.length!==1?'s':''}${q?` matching "${q}"`:' in library'}`;
+
+  const cats = [...new Set(prompts.map(p=>p.category))].length;
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-pill"><strong>${prompts.length}</strong> total prompts</div>
+    <div class="stat-pill"><strong>${cats}</strong> categories</div>
+    ${q?`<div class="stat-pill"><strong>${filtered.length}</strong> results</div>`:''}`;
+
+  const container = document.getElementById('promptContainer');
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty"><div class="empty-icon">📋</div>
+      <h3>${q||activeCategory!=='all'?'No prompts found':'Library is empty'}</h3>
+      <p>${q||activeCategory!=='all'?'Try a different search or category.':'Click <strong>+ New Prompt</strong> to get started.'}</p></div>`;
+    return;
+  }
+  container.className = currentView==='grid'?'prompt-grid':'prompt-list';
+  container.innerHTML = filtered.map(p=>cardHTML(p)).join('');
+}
+
+function cardHTML(p) {
+  const tags = (p.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
+  const date = new Date(p.created).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
+  return `<div class="prompt-card">
+    <div class="card-header">
+      <div class="card-title">${esc(p.title)}</div>
+      <div class="card-actions">
+        <button class="act-btn" id="copy-${p.id}" onclick="copyPrompt('${p.id}')">Copy</button>
+        <button class="act-btn" onclick="editPrompt('${p.id}')">Edit</button>
+        <button class="act-btn del" onclick="askDelete('${p.id}')">Delete</button>
+      </div>
+    </div>
+    <div class="card-tags">
+      <span class="tag tag-cat">${esc(p.category)}</span>
+      ${tags.map((t,i)=>`<span class="tag ${TAG_CLASSES[i%TAG_CLASSES.length]}">${esc(t)}</span>`).join('')}
+    </div>
+    <div class="card-body clamped" id="prev-${p.id}">${esc(p.prompt)}</div>
+    <button class="expand-link" id="expbtn-${p.id}" onclick="toggleExpand('${p.id}')">Show full prompt ↓</button>
+    <div class="card-footer">
+      <div class="card-note">${p.notes?esc(p.notes):''}</div>
+      <div class="card-date">${date}</div>
+    </div>
+  </div>`;
+}
+
+function toggleExpand(id) {
+  const el=document.getElementById('prev-'+id), btn=document.getElementById('expbtn-'+id);
+  btn.textContent = el.classList.toggle('clamped')?'Show full prompt ↓':'Collapse ↑';
+}
+function copyPrompt(id) {
+  const p=prompts.find(x=>x.id===id); if(!p) return;
+  navigator.clipboard.writeText(p.prompt).then(()=>{
+    const btn=document.getElementById('copy-'+id);
+    if(btn){btn.textContent='Copied!';btn.classList.add('copy-done');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copy-done');},2000);}
+    showToast('Prompt copied to clipboard');
+  });
+}
+function setCategory(cat){activeCategory=cat;render();}
+function setView(v){currentView=v;document.getElementById('vGrid').classList.toggle('active',v==='grid');document.getElementById('vList').classList.toggle('active',v==='list');renderMain();}
+function applyFilters(){renderMain();renderSidebar();}
+
+function openModal(id) {
+  editId=id||null;
+  ['fTitle','fPrompt','fTags','fNotes'].forEach(f=>document.getElementById(f).value='');
+  document.getElementById('fCat').value='Triumph Business Solutions';
+  document.getElementById('customCatField').style.display='none';
+  if(id){
+    const p=prompts.find(x=>x.id===id);
+    document.getElementById('fTitle').value=p.title;
+    document.getElementById('fPrompt').value=p.prompt;
+    document.getElementById('fTags').value=p.tags||'';
+    document.getElementById('fNotes').value=p.notes||'';
+    const opts=Array.from(document.getElementById('fCat').options).map(o=>o.value);
+    if(opts.includes(p.category)) document.getElementById('fCat').value=p.category;
+    else{document.getElementById('fCat').value='Custom...';document.getElementById('customCatField').style.display='block';document.getElementById('fCustomCat').value=p.category;}
+  }
+  document.getElementById('modalTitle').textContent=id?'Edit Prompt':'New Prompt';
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('fTitle').focus(),100);
+}
+function editPrompt(id){openModal(id);}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+function toggleCustomCat(){document.getElementById('customCatField').style.display=document.getElementById('fCat').value==='Custom...'?'block':'none';}
+function savePrompt() {
+  const title=document.getElementById('fTitle').value.trim(), prompt=document.getElementById('fPrompt').value.trim();
+  if(!title||!prompt){alert('Please fill in the title and prompt fields.');return;}
+  let cat=document.getElementById('fCat').value;
+  if(cat==='Custom...') cat=document.getElementById('fCustomCat').value.trim()||'General';
+  const tags=document.getElementById('fTags').value.trim(), notes=document.getElementById('fNotes').value.trim();
+  if(editId){const idx=prompts.findIndex(p=>p.id===editId);if(idx>-1)prompts[idx]={...prompts[idx],title,prompt,category:cat,tags,notes};}
+  else prompts.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),title,prompt,category:cat,tags,notes,created:Date.now()});
+  pushPrompts(); closeModal(); render();
+}
+function askDelete(id){deleteId=id;document.getElementById('confirmOverlay').classList.add('open');}
+function closeConfirm(){document.getElementById('confirmOverlay').classList.remove('open');deleteId=null;}
+function confirmDelete(){if(deleteId){prompts=prompts.filter(p=>p.id!==deleteId);pushPrompts();render();}closeConfirm();}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+fetchPrompts();
+</script>
+</body>
+</html>
