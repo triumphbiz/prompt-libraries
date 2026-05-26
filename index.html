@@ -3,128 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Triumph Business Solutions — Prompt Library</title>
+<title>Artistly — Prompt Library</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #1D364F; --olive: #88965E; --copper: #9D541C; --teal: #477474;
-  --blue: #264867; --navy-dk: #152840; --navy-lt: #243f5c; --copper-lt: #C4793A;
-  --off-white: #F5F3EF; --warm-white: #FDFCFA; --border: #DDD9D0; --border2: #C8C3B8;
-  --text: #1A2B3C; --text2: #5A6A7A; --text3: #8A9AAA; --radius: 10px; --radius-sm: 6px;
+  --bg: #F9F7FF; --surface: #FFFFFF; --surface2: #F2EFF9; --border: #E2DCF0; --border2: #C8BEDE;
+  --text: #1A1530; --text2: #6B5F8A; --text3: #A098B8;
+  --sidebar: #1E1535; --sidebar2: #271A44;
+  --purple: #6B3FA0; --purple-lt: #8B5FC0;
+  --gold: #D4A034; --gold-lt: #E8BC58; --gold-bg: #FBF5E6;
+  --teal: #2D8A7A; --teal-bg: #E4F4F1;
+  --red: #8B2E2E; --red-bg: #F5EAEA;
+  --radius: 10px; --radius-sm: 6px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Inter', sans-serif; background: var(--off-white); color: var(--text); min-height: 100vh; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 .layout { display: flex; min-height: 100vh; }
-.sidebar { width: 270px; flex-shrink: 0; background: var(--navy); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; overflow: hidden; }
-.sidebar::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent, transparent 40px, rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 80px); pointer-events: none; }
-.sidebar-header { padding: 0.75rem 1.25rem 0.6rem; border-bottom: 1px solid rgba(255,255,255,0.08); position: relative; }
-.brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0; }
-.brand-name { font-size: 13px; font-weight: 800; color: #fff; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.1; }
-.brand-sub { font-size: 9.5px; font-weight: 400; color: rgba(255,255,255,0.45); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
-.library-label { font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-top: 6px; }
-.sidebar-search { padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.07); position: relative; }
+.sidebar { width: 270px; flex-shrink: 0; background: var(--sidebar); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; overflow: hidden; }
+.sidebar::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at top left, rgba(107,63,160,0.25) 0%, transparent 60%), radial-gradient(ellipse at bottom right, rgba(212,160,52,0.1) 0%, transparent 60%); pointer-events: none; }
+.sidebar-header { padding: 1.25rem 1.25rem 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.08); position: relative; }
+.brand-row { display: flex; align-items: center; gap: 10px; }
+.brand-icon { width: 36px; height: 36px; flex-shrink: 0; background: linear-gradient(135deg, var(--purple) 0%, var(--gold) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 10px rgba(107,63,160,0.4); }
+.brand-name { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.02em; line-height: 1; }
+.brand-name span { color: var(--gold-lt); }
+.brand-sub { font-size: 9.5px; font-weight: 500; color: rgba(255,255,255,0.35); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+.library-label { font-size: 10px; color: rgba(255,255,255,0.28); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; margin-top: 8px; }
+.sidebar-search { padding: 0.9rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.07); position: relative; }
 .sidebar-search input { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-sm); padding: 8px 12px 8px 32px; font-family: 'Inter', sans-serif; font-size: 13px; color: #fff; outline: none; transition: all 0.15s; }
-.sidebar-search input::placeholder { color: rgba(255,255,255,0.3); }
-.sidebar-search input:focus { border-color: var(--copper-lt); background: rgba(255,255,255,0.12); }
-.search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: 0.4; pointer-events: none; }
-.sidebar-section { padding: 1.1rem 1.25rem 0.4rem; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 600; }
+.sidebar-search input::placeholder { color: rgba(255,255,255,0.28); }
+.sidebar-search input:focus { border-color: var(--gold); background: rgba(255,255,255,0.12); }
+.search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: 0.35; pointer-events: none; }
+.sidebar-section { padding: 1rem 1.25rem 0.4rem; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.28); font-weight: 600; }
 .cat-list { flex: 1; overflow-y: auto; padding-bottom: 1rem; }
-.cat-list::-webkit-scrollbar { width: 4px; }
-.cat-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
-.cat-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 1.25rem; cursor: pointer; font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.55); border-left: 3px solid transparent; transition: all 0.15s; }
-.cat-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
-.cat-item.active { color: #fff; font-weight: 600; border-left-color: var(--copper-lt); background: rgba(255,255,255,0.09); }
-.cat-count { font-size: 10.5px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); padding: 2px 7px; border-radius: 20px; min-width: 24px; text-align: center; font-weight: 500; }
-.cat-item.active .cat-count { background: var(--copper); color: #fff; }
+.cat-list::-webkit-scrollbar { width: 3px; }
+.cat-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
+.cat-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 1.25rem; cursor: pointer; font-size: 13px; color: rgba(255,255,255,0.5); border-left: 3px solid transparent; transition: all 0.15s; }
+.cat-item:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.05); }
+.cat-item.active { color: #fff; font-weight: 600; border-left-color: var(--gold); background: rgba(255,255,255,0.08); }
+.cat-count { font-size: 10.5px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); padding: 2px 7px; border-radius: 20px; min-width: 24px; text-align: center; font-weight: 500; }
+.cat-item.active .cat-count { background: var(--gold); color: #fff; }
 .sidebar-bottom { padding: 1rem 1.25rem 1.25rem; border-top: 1px solid rgba(255,255,255,0.08); }
-.add-btn-main { width: 100%; background: linear-gradient(135deg, var(--copper) 0%, var(--copper-lt) 100%); color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 0; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer; letter-spacing: 0.02em; transition: opacity 0.15s; box-shadow: 0 2px 10px rgba(157,84,28,0.4); }
+.add-btn-main { width: 100%; background: linear-gradient(135deg, var(--purple) 0%, var(--purple-lt) 100%); color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 0; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: opacity 0.15s; box-shadow: 0 2px 12px rgba(107,63,160,0.45); }
 .add-btn-main:hover { opacity: 0.9; }
 .main { margin-left: 270px; flex: 1; }
-.topbar { background: var(--warm-white); border-bottom: 1px solid var(--border); padding: 1.1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 5; box-shadow: 0 1px 0 var(--border); }
-.topbar-left h1 { font-size: 18px; font-weight: 700; color: var(--navy); letter-spacing: -0.01em; }
+.topbar-accent { height: 3px; background: linear-gradient(90deg, var(--purple) 0%, var(--purple-lt) 40%, var(--gold) 70%, var(--gold-lt) 100%); }
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 5; }
+.topbar-left h1 { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
 .topbar-left p { font-size: 12.5px; color: var(--text2); margin-top: 1px; }
 .topbar-right { display: flex; gap: 8px; align-items: center; }
 .sync-status { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text3); margin-right: 4px; }
 .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #ccc; }
 .sync-dot.ok { background: #4caf7d; }
 .sync-dot.err { background: #e05252; }
-.sync-dot.saving { background: var(--copper); animation: pulse 1s infinite; }
+.sync-dot.saving { background: var(--gold); animation: pulse 1s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-.view-toggle { display: flex; background: var(--off-white); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 2px; gap: 2px; }
-.view-btn { background: none; border: none; cursor: pointer; padding: 5px 10px; border-radius: 4px; font-size: 13px; color: var(--text2); transition: all 0.15s; font-family: 'Inter', sans-serif; }
-.view-btn.active { background: var(--navy); color: #fff; }
-.sort-select { background: var(--warm-white); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 10px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text); outline: none; cursor: pointer; }
+.view-toggle { display: flex; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 2px; gap: 2px; }
+.view-btn { background: none; border: none; cursor: pointer; padding: 5px 10px; border-radius: 4px; font-size: 13px; color: var(--text2); font-family: 'Inter', sans-serif; transition: all 0.15s; }
+.view-btn.active { background: var(--sidebar); color: #fff; }
+.sort-select { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 10px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text); outline: none; cursor: pointer; }
 .content { padding: 1.5rem 2rem 3rem; }
 .stats-row { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-.stat-pill { background: var(--warm-white); border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; font-size: 12.5px; color: var(--text2); }
-.stat-pill strong { color: var(--navy); font-weight: 700; }
+.stat-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; font-size: 12.5px; color: var(--text2); }
+.stat-pill strong { color: var(--text); font-weight: 700; }
 .prompt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
 .prompt-list { display: flex; flex-direction: column; gap: 10px; }
-.prompt-card { background: var(--warm-white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem 1.3rem; transition: box-shadow 0.15s, border-color 0.15s; position: relative; overflow: hidden; }
-.prompt-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, var(--copper) 0%, var(--copper-lt) 100%); opacity: 0; transition: opacity 0.15s; }
-.prompt-card:hover { border-color: var(--border2); box-shadow: 0 3px 16px rgba(29,54,79,0.08); }
+.prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem 1.3rem; transition: box-shadow 0.15s, border-color 0.15s; position: relative; overflow: hidden; }
+.prompt-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, var(--purple) 0%, var(--gold) 100%); opacity: 0; transition: opacity 0.15s; }
+.prompt-card:hover { border-color: var(--border2); box-shadow: 0 3px 16px rgba(107,63,160,0.1); }
 .prompt-card:hover::before { opacity: 1; }
-.card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-.card-title { font-size: 14.5px; font-weight: 700; color: var(--navy); line-height: 1.3; letter-spacing: -0.01em; }
-.card-actions { display: flex; gap: 5px; flex-shrink: 0; opacity: 0; transition: opacity 0.15s; }
 .prompt-card:hover .card-actions { opacity: 1; }
-.act-btn { background: var(--off-white); border: 1px solid var(--border); border-radius: 5px; padding: 3px 9px; font-size: 11.5px; font-family: 'Inter', sans-serif; cursor: pointer; color: var(--text2); transition: all 0.12s; white-space: nowrap; font-weight: 500; }
-.act-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
-.act-btn.copy-done { background: var(--olive); color: #fff; border-color: var(--olive); }
-.act-btn.del:hover { background: #8B2E2E; color: #fff; border-color: #8B2E2E; }
+.card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.card-title { font-size: 14.5px; font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.01em; }
+.card-actions { display: flex; gap: 5px; flex-shrink: 0; opacity: 0; transition: opacity 0.15s; }
+.act-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; padding: 3px 9px; font-size: 11.5px; font-family: 'Inter', sans-serif; cursor: pointer; color: var(--text2); transition: all 0.12s; white-space: nowrap; font-weight: 500; }
+.act-btn:hover { background: var(--sidebar); color: #fff; border-color: var(--sidebar); }
+.act-btn.copy-done { background: var(--teal); color: #fff; border-color: var(--teal); }
+.act-btn.del:hover { background: var(--red); color: #fff; border-color: var(--red); }
 .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }
-.tag { font-size: 10.5px; padding: 2px 8px; border-radius: 20px; font-weight: 600; letter-spacing: 0.02em; }
-.tag-cat { background: rgba(29,54,79,0.1); color: var(--navy); }
-.tag-teal { background: rgba(71,116,116,0.12); color: var(--teal); }
-.tag-olive { background: rgba(136,150,94,0.13); color: #5a6830; }
-.tag-kw { background: var(--off-white); color: var(--text2); border: 1px solid var(--border); }
-.card-body { font-size: 12.5px; color: var(--text2); line-height: 1.7; white-space: pre-wrap; word-break: break-word; font-weight: 400; }
+.tag { font-size: 10.5px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+.tag-cat { background: rgba(107,63,160,0.1); color: var(--purple); }
+.tag-gold { background: var(--gold-bg); color: #8B6010; border: 1px solid #E8D5A0; }
+.tag-teal { background: var(--teal-bg); color: var(--teal); }
+.tag-kw { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+.card-body { font-size: 12.5px; color: var(--text2); line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
 .card-body.clamped { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.expand-link { font-size: 11.5px; color: var(--copper); background: none; border: none; cursor: pointer; padding: 4px 0 0; font-family: 'Inter', sans-serif; font-weight: 600; }
-.expand-link:hover { color: var(--copper-lt); }
+.expand-link { font-size: 11.5px; color: var(--purple); background: none; border: none; cursor: pointer; padding: 4px 0 0; font-family: 'Inter', sans-serif; font-weight: 600; }
+.expand-link:hover { color: var(--purple-lt); }
 .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
 .card-note { font-size: 11.5px; color: var(--text3); font-style: italic; flex: 1; line-height: 1.4; }
 .card-date { font-size: 10.5px; color: var(--text3); white-space: nowrap; margin-left: 8px; font-weight: 500; }
 .empty { text-align: center; padding: 5rem 2rem; }
 .empty-icon { font-size: 44px; margin-bottom: 1rem; opacity: 0.25; }
-.empty h3 { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.empty h3 { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
 .empty p { font-size: 13.5px; color: var(--text2); }
-.modal-overlay { position: fixed; inset: 0; background: rgba(15,25,40,0.55); display: none; align-items: center; justify-content: center; z-index: 100; padding: 1rem; backdrop-filter: blur(3px); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(20,10,40,0.6); display: none; align-items: center; justify-content: center; z-index: 100; padding: 1rem; backdrop-filter: blur(3px); }
 .modal-overlay.open { display: flex; }
-.modal { background: var(--warm-white); border-radius: 14px; border: 1px solid var(--border); padding: 2rem; width: 100%; max-width: 580px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.2s ease; }
+.modal { background: var(--surface); border-radius: 14px; border: 1px solid var(--border); padding: 2rem; width: 100%; max-width: 580px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.2s ease; }
 @keyframes slideUp { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 .modal-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
-.modal-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--copper), var(--copper-lt)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
-.modal-title { font-size: 20px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; }
+.modal-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--purple), var(--gold)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+.modal-title { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
 .field { margin-bottom: 13px; }
 .field label { display: block; font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 5px; letter-spacing: 0.05em; text-transform: uppercase; }
-.field input, .field select, .field textarea { width: 100%; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 12px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text); outline: none; transition: border-color 0.15s; }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(29,54,79,0.07); }
+.field input, .field select, .field textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 12px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text); outline: none; transition: border-color 0.15s; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(107,63,160,0.08); }
 .field textarea { height: 190px; resize: vertical; line-height: 1.65; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
 .btn-cancel-modal { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 20px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text2); cursor: pointer; font-weight: 500; }
-.btn-cancel-modal:hover { background: var(--off-white); }
-.btn-save-modal { background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%); color: #fff; border: none; border-radius: var(--radius-sm); padding: 9px 24px; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(29,54,79,0.25); }
+.btn-cancel-modal:hover { background: var(--surface2); }
+.btn-save-modal { background: linear-gradient(135deg, var(--purple) 0%, var(--purple-lt) 100%); color: #fff; border: none; border-radius: var(--radius-sm); padding: 9px 24px; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(107,63,160,0.3); }
 .btn-save-modal:hover { opacity: 0.9; }
-.confirm-overlay { position: fixed; inset: 0; background: rgba(15,25,40,0.55); display: none; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
+.confirm-overlay { position: fixed; inset: 0; background: rgba(20,10,40,0.6); display: none; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
 .confirm-overlay.open { display: flex; }
-.confirm-box { background: var(--warm-white); border-radius: var(--radius); border: 1px solid var(--border); padding: 1.75rem 1.5rem; max-width: 340px; width: 100%; text-align: center; }
-.confirm-box h3 { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 7px; }
+.confirm-box { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 1.75rem 1.5rem; max-width: 340px; width: 100%; text-align: center; }
+.confirm-box h3 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 7px; }
 .confirm-box p { font-size: 13px; color: var(--text2); margin-bottom: 1.25rem; }
 .confirm-btns { display: flex; gap: 8px; justify-content: center; }
-.btn-confirm-del { background: #8B2E2E; color: #fff; border: none; border-radius: var(--radius-sm); padding: 9px 22px; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.btn-confirm-del { background: var(--red); color: #fff; border: none; border-radius: var(--radius-sm); padding: 9px 22px; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; }
 .btn-confirm-cancel { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 22px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--text2); cursor: pointer; }
-.toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--navy); color: #fff; border-radius: var(--radius-sm); padding: 11px 18px; font-size: 13.5px; font-weight: 500; z-index: 300; transform: translateY(80px); opacity: 0; transition: all 0.25s ease; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+.toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--sidebar); color: #fff; border-radius: var(--radius-sm); padding: 11px 18px; font-size: 13.5px; font-weight: 500; z-index: 300; transform: translateY(80px); opacity: 0; transition: all 0.25s ease; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
 .toast.show { transform: translateY(0); opacity: 1; }
-.loading-screen { position: fixed; inset: 0; background: var(--navy); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
-.loading-brand { font-size: 15px; font-weight: 800; color: #fff; letter-spacing: 0.08em; text-transform: uppercase; }
-.loading-sub { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase; margin-top: -10px; }
-.spinner { width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.15); border-top-color: var(--copper-lt); border-radius: 50%; animation: spin 0.8s linear infinite; margin-top: 8px; }
+.loading-screen { position: fixed; inset: 0; background: var(--sidebar); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 12px; }
+.loading-brand { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.03em; }
+.loading-brand span { color: var(--gold-lt); }
+.loading-sub { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.1em; text-transform: uppercase; }
+.spinner { width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.12); border-top-color: var(--gold-lt); border-radius: 50%; animation: spin 0.8s linear infinite; margin-top: 6px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.topbar-divider { height: 4px; background: linear-gradient(90deg, var(--navy) 0%, var(--teal) 35%, var(--olive) 65%, var(--copper) 100%); }
 @media (max-width: 768px) {
   .sidebar { width: 100%; height: auto; position: relative; }
+  .cat-list { max-height: 200px; }
   .layout { flex-direction: column; }
   .main { margin-left: 0; }
   .topbar { flex-direction: column; align-items: flex-start; gap: 10px; padding: 1rem; position: relative; }
@@ -143,8 +151,8 @@ body { font-family: 'Inter', sans-serif; background: var(--off-white); color: va
 <body>
 
 <div class="loading-screen" id="loadingScreen">
-  <div class="loading-brand">Triumph</div>
-  <div class="loading-sub">Business Solutions</div>
+  <div class="loading-brand">Artist<span>ly</span></div>
+  <div class="loading-sub">Prompt Library</div>
   <div class="spinner"></div>
 </div>
 
@@ -152,10 +160,10 @@ body { font-family: 'Inter', sans-serif; background: var(--off-white); color: va
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="brand-row">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAShElEQVR42u1ceXBdZ3X/ne9ub5f0tFneHUVeINjZ4yQkmIQ4JO1AybANDHSgBfoHZQb6V6c0pS1/MNB2QmGmKVuaDmvSkIQUggk4C46d2HVsS3a8R7Jla7H09uXed5fv9I9779N7thRLsmynxd+MPH7Se/d+3++e8zvn/M6RgCvryrqyrqzLt+gttRE6d0Mc/MN/qE9HEEB0xYLOWYIA2WAWhkpIx1S0RBTWFP97tsdUrklYLqNoeXC8S29H6uV6KpKBpCFwy4oYb1gcRU9KRUtEga4SBAG6QnA88IFxCy8dr+C1Uya5kiEIYA6+/j9YkAh4JTxMeLD3rE7w+65JoTOuwmPA9RieZHgMKASczDvYerSMw2dqVKp5cCXOsSBB/rWY/w8CFPLKdJv/s1vSvHlNAhWb4XgMCniocTNFS4LBiGkCDKBqS2QqHk7kbBwcr+HIRI0qtjzvvd5yAFGw4ZBf1i+OcHdSxVjRRc70aOOKGH/42lbkqt6bErQiCATAYw7InKAIQBUEj4HJsot9IxZeOF6mwYw9ZVEL7Hp0sYi3J6XhgfUp3rgiBlUQXMmwPYZCVLeamRYDkJIhgjdJAALNB9cUgqESai5j93AVzxwo0YmcPW0AeEtZUFwXuG9dkjevSSKuC1RtWT8gBU/4zcCR7B8+ohJsj8HB66ojmzYbcg8RENMELFfiucNlPDVQIMvlBQOJFgrlZETBXX0Jvm9dEumogmLNgyf9pzmbFSaEcUNgouxi22AF+0ctuBJ0+6oY33V1AjWPp92wJxlEhLguMJS18R+7cnR0orYgINFCgMMAOhMqbl4e46s7dCxp0dAWVWa0lLN5gpmhKgRDFdh6tIwn+wuUM72mz3z+jg6+dUUMFVs2gd5ocQw/PbA9xqO7cthyqERvORcDgNtWxvkTN7ZCV6luRaFLCPKJVlUAhfxDCQLKNYlHdubw8mCFAKCv08DdfQluiyn4/itZaokq+Lt7u9m0ZRPwp/IO+kctjBVdpCICy9o0LG3RsCqt46U3Kvjh7jzVHDlv4lYXysUoAOGj17XyvWuScCVDSp+TTEdCISCqC1QdiTNlF+MlF+NlF5myC4+BoxM1GszaMFTCB97RwpvXJKEpfjJ5bCLOzx0pkzsNuS9v09AeV7F/1MKWwyX69aESAKA9rmB9T5TXdhncP2LSfOu5hQEo8PVP35Lm965NomB6APnlw++OlrFxRQy2x3h6fx57Tps0VnRhT1M2xHWBP9+Y5rv7EihaEsWaB1UQMlUPPSmNDZVg1/gcF4vrhE1Xx3Fnb5x3DVfxsz0FGi06eP5YmRpp4LK4WEiEH7q2hT+4vgV503eBhCHw2N4Cnhoo0N19CT4yUaPhvNMEKjX8349IhPaYguVtGt/Zm8CGxRFIZnztdxP00etaubddR82dPkWQ7F8vrguUbImfvJbHC8fKFF77snBQCM6Ny6L8V5s6UbYlmP1NPn+sjO+9kiVFAJ5sLg3o7Lpshix4aauGm5fH+LaVMaxo05GpulDPExY9BlThh/6n9xfx0z15upBoJi7UrXpSGv7yjg6YjoTtMjSFkKm4eHRXjgBAyilJI9yk5Kkvj6fACa1qTZeBv7itnZmBn/cX6N9eztC+ERMtEeW8JYVC/j1LNYkPrE/h4ze0seTZpxsLZkHhYd67LsVSMkxH4oMbWpEwCKbD+OZLkzRadFC1JVzZ7EqtUQWdcRVtMYW7kyoOn6nRkYa8JWEIPPQnizmiEl45YeJne/M0UXbx/mtS/MD6Fkj2C9fzHdpjoDUi8MjOHH59qDQvS7ogFwvdZ1FKxV/f3cUtEQV2EGlShsCLxyv4/qtZsoPM1mPg1pUx/sIdHVAVgulIbD1axlMDRSqEeQ/54f+r93fzoqQGTfHLiWcOFPHkQIHWdhn8hTs6kIgIWM70IHEDMRP8tOIrW8ZpKGvPOXm8IAtiBpa0aHjw3m6OqgTL9e+cNAR2nqzi33dkqRokdpL9wvVj17dh2xsVZKsujkzYNFlxp0KqAFwJLG/T8ZV7uzh0QSUg/QNjNXzr95MkCPibe7q5K6HAPAskDgCR7KcZDCCmEQ6M1fC1rWdorlU/zdsvCYhqAg9u7uYlLSqqDkMASEYEnj9WwXd3ZCj0fWY/075lRYxfPF6houU1EX1jdt0aVfCld3XwynRzxPKkX4aUax4eenESw3mHvnr/Im6PKQhrr/B6o0UX6ZiChCFQdbge3b6+dQL7Rsw5uZq4EOv55I1tvKJNQ9X2wYlqhN8cLuM72zPUGOUYQMWWeOZAkYqWB4X8n4Xghe+5fVWc/3ZzF69q12GdFc4V4V/DUAW+fE8XrumJ8N9vGSfLZWiCmvKcZETgmQMlDOcdpAwBTzIYwD1rElN138WKYuGhb14e4zt74yjV/LwnpgvsGjbxg1ezxA2RKqoJ6AqhYvvVOAXkGb6HAdy0PMYPbu7mz92aRldCPcdtGiOU4zEsl/HFd3VgbZfB//zCBBka1U/tSiAdVXD7qhi++dIk7Rux0BZVUKl5WNdloCelnVdRmLeLUYPA/o/3LeLOhArLZegKYHuMoxM2WqMKJsouDJXQlVCRtzw89OIkVQP1r5FAV6Z1fOz6Vn7boggAYKzooGJLrErrvtQxwwbDAyYMgX96fhKr0ho+uKEFecsvaTwJtMUEfnukgu/syNCXNnXy9UsjAAg/2p3DswdnH9HEnF0LwF19CV7SoqHmMloiviTqeIwnBwpUtDy8uy+Btd0Gjmds/OeuXF0a5YZrXNWu48v3dPHbF0VQtSWqtkRHXIUmCNuHqtAUmnFzoYtXahKff2c7zpQ9DGZtv6Jn3x1zpsRdfXHctDzG//LCBO07bSGqEdZ0GXNyMzEX6wld5t19CTCAiEb45esl/Hh3HumYCkUQvvH8BG0fquB7r2Tx8PZMvbzgswrbjrjKEVWgVJN1PrI9xsp2HRGV8OPX8jA0mjHi1BNPAh5Yn8JQ1qm/Dg9mOYyPXteKiCbw7W0ZOj5po6/DgB4ASQsKUHC165dGuK/DwFDWxtd+N4Gf7snTnb1xRFTChsURBoBnD5YQ08S0DcJQ9th1skrjZQfRBhAE+Rnw7atiyJseHt9bQDIiZnQFIsB2GS0RBeu6DVjOlFZEBNQ8xuKUik29cTYdiW/9fpJ0lbAooc6aYGYNUHiI+9al8MLxMr763Bk6OG7R525L8+pOAznTw6beBHTFF9s/e2san7o5zVe161OEzEBbVMH1S6P8kutauWBKmE6zACYAmA7jj9+Wwq8Olmg470BXaEaXEAQ4kpE0/GDQaHHCbz5i09VxGCphOO/g6f1FLGnVeLYErM4lrPd26Ng/auGne/IEADcti/FtK/1IBgAtUYEvvquDI5rAc0fKaIsp+Nxt7Zw3PfSPmBgYtWi06OLYZI1qLnN7XMHKtNZkIeGTX96mIRUR2HKohM9sTMO2Zhb6Q/efbt81l7G0Vce67gjvGzFp65EypePqrHlodnpQcKW8KevgaArhfdek4AU7E8Fm+joNfH3rBB2ZqNW7D2u7DN64Iob3rE5yVPOTvagm0BL1y4XprFVXCL3tBu8+ZdLHHea5FJthndioItywNIq9p02YrsSpvD3rPpo6B3yQqbj15O7aJVHubddRbigl4rrAruEqjkzUoArUi8qBUYsGRi2kIgpuWBrld/fF0RFX/QTzTQ7eHlew86SHTMVFR1w9b7soBMN0/BQhoQvYnt9uWt1lQFOCltPFiGKNPutnvbFzbiKZEVFFPWELRawwShUtDwOjFoUueT6jsIPDnM1Tb7YkA7pK2Hq0jLItoQr/IXXGFfQk1aaAc1Ey6VCO8NW9KQGdyO+vL06pSBoKFDHVaQgLyI9c18rfeF8Pb+iJntcaXMkYLbjgoMvKc9hfyhBQBeHxvXnEdQHXY0Q0USfniyaYhQda1qpxS0SBJxtkUwCO9IvN91+TYlUAG1fEOST4z9zazh/a0AJXst8EpJndWRNAturhjUyN4rpAKqL4XEezs3LTYdy0LIqXB6t0cLyGqCaAoGC+JIpid1KFOk3oDZO9e9cmcP+6FEc0wubVSU7HVGxcEUW26jVV8NNagPST0f8ZNmG5jNWdBrdGBFw5u7BMQdjvSqpoiyl4or8AVSFIoK5IXvSuRktEaSK6s4Xxmst4YH0Kr4/X0J1QceOyKNfc8yuAfpsZyFQ9/Oqg3/S7szcOorn1JcJ29VXtOr96okrDOZuv7jCgzEN3nZcFaQo1kaztntsSthzGui4DSUPU65/ZRMuoJvCj1/LIVFy8oyfCNyyNomrLOWvKBKAzyHf2nLaCQQd5cQEK91i1ud7mPZV3MJi1oat0bsLn+u+ruTw7co0IPL6vgO2DFUpFFPzpTW3z6mdxg+oAAPvHLLiSUbQuMkDhjScrLjzpdzBeHqrCCcZaZiL184XVEJynBor4eX+BFEH47K1p7klpM/bBZhfR/B2PFBzKmx7OlN1LA9CpgkO2x6jYEntOmRTVBCTzvPTbcFbx5/3Fepb+6Zvb+Ial0XoSOpu297SWHmTpFVviVMHB6bxDc1UU50TSIRGPFR1kKx5sjzFZcaeq9DkqcCE4/7WvgCf6CwQAn7ypje9enUAhEL/OlzVXbAnHA9qiAm5DJiAZyDY0BA6M1eoWNBfRft6S675Rqx62/fYLzctyfnGgWAfnw9e28v3rkijOApwwUo2VXAyMmjBU0SSbWI7ESNGt9+Z3DFXJlXO3cjFfAtwxVKHwiZwpu+e4guSZn1RYt+0YquInr/mutXlNkh9Yn0LRml3ECrPzsaKL/aM1CNEMXDhBgkDtPBmM582V9OecB4WHHso6iKgmAGAwazeN+WoKYTBroz1ovTRGt7BSHy+5+MCOLAHA2xdF+BM3ttYbAHOx5qGsjVMFmxyPOezz6wrh9fEawrnqC5kym3dv3pOM18csAvzZnjDyi4MG4BsZG1VHnlNHcZBHPbY3j3JNIq4LfOrmtrrFzRYfCqr2Q2dqVKpJXxkQQcnjMV45UV2Q4TBxIR8OSflMycVgxh9+kswQgvBGxkam4s/3hAgx+zr2kYkadp70D/BHb0vx0lZtxjZyvYtx1mtD8RXCkaIDT/oVPwKd/PBEDccmazMKaZcMoMZOx7bBSn00hQLtaDBrQxUNU/YANEF46XgFMige7+qLo2JLKOLNM/emCBV8b+fJar0jG+o8ggj/faA0p97XRQUoLLJfPVGlk3kHhkJhQ5D6RywKB8lC18uZHvaNmAQAm3rj3BJRMFMFwEEX5ZkDRWQqrl8gB/M/edPDtmCe0ZMMWzIShoJdJ6vYN2ISLdAYsFgIPw3LiqcHitBVP2mMaYKPZ2xMlF1owcG0oDTJVj3oCuHGZTHUXJ52E5KBRETgh7tz+OXrRUrHfMkjuDa2DVaRq071+CMqoWh5+NHu/MIOxy/ERcIhhe1DFdp1soqk4UcvTzJ2nzIRUQmeZKiCcLrg98lWpXUsSk0vo3pBjvRkfxHPHixRb4fBcd2XPFSFkDc9PHuwWP+YphBShoJHduYw2SALv2UAaiTsR3flKGd66ElpAIDnj5ap2iCZhvPPV3XoPF07xwsUwa1Hy3hsb56IgN52vf7rDHHdH63LVj2I4KJdCRW/PFjCy4MVWshfQ1hYgAJSzJkevr1tEktbNRABw3kHr56oIq4LeOxLI4A/V8TTWGJMIxw6U8MjO3P1Acy13QZsz+997T1t4TeHyz4QARJjJRdPDRRoIaLWRQOoTtgE7B426beHS0jo/uWf3l+kUEAPo1VrVGlOIAMSr9iMh7dnyA2Yvj2mYGVaBwHIVT1895UMSeZ67eeXOnJeWfIlB6jRkvpHLQqr8fGSi6f3FxHXBeIBaKporhrDiPXY3jzGSwGxA9iwJModcX9I6l9/n6FMxVtQjrnkADUmduFwlCBgy6ES7T1t4eoOY6qlE/66E/vDV/vHLLxwzHefsCF5d18ClsN46MVJHJusYaE55rIAdLa5h735h7dnKB1ToArCaKG5wCUAv9hfDAD1c6l3ropzd1LFP/xmnF4ft+hSg3NRATrbogQBpwsOnugvoq/T4IFRK/gZI6L6pcmBMYsosJ7WqD+x8eCz43Rs0sblAGfeXY0LIfAdQxVqi/qcMl5yOWkIqAphz2kLMhh+8thvFj66K0e2x5cNnEtmQWdzU870YDoSvz1SRkwXsF3GG5nmgYJMxa3PXMvL+GcXxKW+YTiGRwRsOVyioxM2NIUwWXGb9GI6S3/6gwGo8dCOx3h4R4aKlgdVzEzyf7ArLKbWdBnoDcL/W/nveFxWkK6sKyBdWVfWlXVlzXn9LyyemRxVUOuGAAAAAElFTkSuQmCC" style="width:36px;height:36px;object-fit:contain;flex-shrink:0;" />
-        <div class="brand-text">
-          <div class="brand-name">Triumph</div>
-          <div class="brand-sub">Business Solutions</div>
+        <div class="brand-icon">🎨</div>
+        <div>
+          <div class="brand-name">Artist<span>ly</span></div>
+          <div class="brand-sub">Artistly.ai Prompts</div>
         </div>
       </div>
       <div class="library-label">Prompt Library</div>
@@ -172,7 +180,7 @@ body { font-family: 'Inter', sans-serif; background: var(--off-white); color: va
   </aside>
 
   <main class="main">
-    <div class="topbar-divider"></div>
+    <div class="topbar-accent"></div>
     <div class="topbar">
       <div class="topbar-left">
         <h1 id="pageTitle">All Prompts</h1>
@@ -198,39 +206,34 @@ body { font-family: 'Inter', sans-serif; background: var(--off-white); color: va
   </main>
 </div>
 
-<!-- ADD/EDIT MODAL -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-icon">📝</div>
+      <div class="modal-icon">✨</div>
       <div class="modal-title" id="modalTitle">New Prompt</div>
     </div>
-    <div class="field"><label>Prompt Title *</label><input type="text" id="fTitle" placeholder="e.g. LinkedIn post — service launch" /></div>
+    <div class="field"><label>Prompt Title *</label><input type="text" id="fTitle" placeholder="e.g. Fairy mushroom cottage — watercolor style" /></div>
     <div class="field-row">
       <div class="field">
         <label>Category</label>
         <select id="fCat" onchange="toggleCustomCat()">
-          <option>Triumph Business Solutions</option>
-          <option>Social Media</option>
-          <option>LinkedIn</option>
-          <option>Google Business Profile</option>
-          <option>Facebook</option>
-          <option>Instagram</option>
-          <option>Marketing</option>
-          <option>Sales</option>
-          <option>Customer Service</option>
-          <option>Email</option>
-          <option>Operations</option>
-          <option>Clipart / Creative</option>
+          <option>Clipart</option>
+          <option>Floral & Nature</option>
+          <option>Characters & People</option>
+          <option>Animals & Creatures</option>
+          <option>Fantasy & Whimsical</option>
+          <option>Food & Objects</option>
+          <option>Seasonal & Holiday</option>
           <option>General</option>
           <option>Custom...</option>
         </select>
       </div>
-      <div class="field"><label>Tags (comma separated)</label><input type="text" id="fTags" placeholder="social, B2B, client" /></div>
+      <div class="field"><label>Tags (comma separated)</label><input type="text" id="fTags" placeholder="watercolor, whimsical, clipart" /></div>
     </div>
     <div class="field" id="customCatField" style="display:none"><label>Custom Category</label><input type="text" id="fCustomCat" /></div>
-    <div class="field"><label>Prompt *</label><textarea id="fPrompt" placeholder="Paste your full prompt here."></textarea></div>
-    <div class="field"><label>Notes / When to use</label><input type="text" id="fNotes" placeholder="e.g. Use for first-contact emails with SME prospects" /></div>
+    <div class="field"><label>Prompt *</label><textarea id="fPrompt" placeholder="Paste your full image generation prompt here..."></textarea></div>
+    <div class="field"><label>Notes / When to use</label><input type="text" id="fNotes" placeholder="e.g. Use whimsical fantasy style, great for Etsy clipart" /></div>
     <div class="modal-btns">
       <button class="btn-cancel-modal" onclick="closeModal()">Cancel</button>
       <button class="btn-save-modal" onclick="savePrompt()">Save Prompt</button>
@@ -238,7 +241,7 @@ body { font-family: 'Inter', sans-serif; background: var(--off-white); color: va
   </div>
 </div>
 
-<!-- CONFIRM DELETE -->
+<!-- CONFIRM -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
     <h3>Delete this prompt?</h3>
@@ -254,71 +257,48 @@ body { font-family: 'Inter', sans-serif; background: var(--off-white); color: va
 
 <script>
 // ── CONFIG ──────────────────────────────────────────────
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzB8U1jVHfLScWvaExUCFBZa2Y5UB9fyYrrhGzAsYDZDEpa1nLK7w-s_nk_g1YUeonR/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXSWktbmpbxZdHtd1ILlgBp68m0wBTC-6oxKoRGXgCjJxw14hrQ2AKlyxToy8P6C3E_g/exec';
 
-// ── SEED DATA (used only if sheet is empty) ─────────────
+// ── SEED DATA ───────────────────────────────────────────
 const SEED_PROMPTS = [
-  {
-    "id": "seed-1",
-    "title": "Social Media Master Prompt",
-    "category": "Social Media",
-    "tags": "master, platform-specific, client content, all platforms",
-    "notes": "Complete the required sections. Comprehensive prompt for generating platform-specific social content for clients",
-    "created": 1777585482699,
-    "prompt": "You are a digital marketing content specialist for Triumph Business Solutions, a marketing and business consultancy. Your job is to create platform-specific social media content for our clients.\n\nCLIENT DETAILS:\n- Business Name: [CLIENT BUSINESS NAME]\n- Industry: [INDUSTRY]\n- Target Audience: [TARGET AUDIENCE]\n- Key Products/Services: [PRODUCTS/SERVICES]\n- Brand Voice/Tone: [BRAND VOICE - e.g. professional, friendly, authoritative]\n- Location: [CITY/REGION]\n\nCONTENT REQUIREMENTS:\nPlatform: [PLATFORM - Facebook / Instagram / LinkedIn / Google Business Profile]\nPost Type: [PROMOTIONAL / EDUCATIONAL / ENGAGEMENT / BEHIND THE SCENES / TESTIMONIAL]\nTopic/Theme: [SPECIFIC TOPIC OR CAMPAIGN]\n\nPLATFORM-SPECIFIC GUIDELINES:\n\nFACEBOOK:\n- Length: 40-80 words optimal, max 400 words\n- Conversational, community-focused tone\n- 1 clear call-to-action\n- 3-5 relevant hashtags maximum\n\nINSTAGRAM:\n- Caption: 138-150 characters for non-truncated display\n- Storytelling approach - hook in first line\n- 10-30 hashtags\n- Moderate and relevant emoji usage\n\nLINKEDIN:\n- Length: 150-300 words\n- Professional but personable tone\n- Compelling hook to open\n- 3-5 professional hashtags\n- End with question or CTA\n\nGOOGLE BUSINESS PROFILE:\n- Length: 100-300 words\n- Local SEO keywords naturally included\n- Business location references\n- Direct CTA with contact info\n\nOUTPUT FORMAT:\nPost ready to publish, then:\n✅ Character count\n📌 Suggested posting time\n🖼️ Image/visual recommendation\n#️⃣ Hashtag set"
-  },
-  {
-    "id": "seed-2",
-    "title": "Client LinkedIn Post Prompt",
-    "category": "LinkedIn",
-    "tags": "LinkedIn, client, professional, engagement",
-    "notes": "Standard LinkedIn post generator for client businesses",
-    "created": 1777671882699,
-    "prompt": "Create a LinkedIn post for my client with the following details:\n\nBusiness: [BUSINESS NAME]\nIndustry: [INDUSTRY]\nTopic: [POST TOPIC]\nGoal: [BRAND AWARENESS / LEAD GENERATION / THOUGHT LEADERSHIP / RECRUITMENT]\nAudience: [TARGET AUDIENCE]\nTone: [PROFESSIONAL / CONVERSATIONAL / INSPIRATIONAL]\n\nPOST STRUCTURE:\n1. Hook (first 1-2 lines - must compel reader to click \"see more\")\n2. Body (main value, story, or insight - 3-5 short paragraphs)\n3. Key takeaway or lesson\n4. Engagement question or CTA\n5. Hashtags (3-5 relevant, mix of broad and niche)\n\nREQUIREMENTS:\n- 150-300 words total\n- Short paragraphs for mobile readability\n- No buzzwords or corporate cliches\n- Write in first person as the business owner\n- Human and relatable, not AI-generated\n- Include a specific detail or example\n\nProvide TWO versions: one more professional, one more conversational."
-  },
-  {
-    "id": "seed-3",
-    "title": "Client LinkedIn Master Prompt - edit client details",
-    "category": "LinkedIn",
-    "tags": "LinkedIn, master, detailed, client, comprehensive",
-    "notes": "Fill in every CLIENT BRIEF field, then paste into AI model. You'll receive 3 post options plus a recommendation on which to use.",
-    "created": 1777758282699,
-    "prompt": "You are a specialist LinkedIn content writer working on behalf of a digital marketing agency. Your job is to write high-performing LinkedIn posts for the agency's clients.\n\nRead the CLIENT BRIEF carefully before writing anything.\n\nCLIENT BRIEF:\nBusiness name: [e.g. Harris & Co Accounting]\nIndustry: [e.g. Accounting & finance]\nBusiness owner / author name: [First name]\nLocation: [e.g. Brisbane, QLD]\nWhat they do: [2-3 sentences]\nTheir LinkedIn audience: [Be specific]\nBrand tone: [e.g. Calm and authoritative]\nPost topic: [The specific subject]\nPost format: [Expert insight / Myth-busting / Reframe / Story beat / List insight / Education post]\nAny specific details to include: [Optional]\nDesired call to action: [e.g. Ask a question to drive comments]\n\nLINKEDIN POST RULES:\n- Write in first person from the business owner's perspective\n- Line 1 is the hook — must stand alone and stop the scroll\n- Short paragraphs, one idea each, white space throughout\n- 150-300 words\n- No bold, no italics, no decorative em dashes\n- Remove: 'passionate about', 'excited to share', 'game-changer'\n- 3-5 hashtags at the very end\n\nOUTPUT: Write exactly 3 LinkedIn post options (Direct / Question / Counterintuitive), then add a RECOMMENDATION."
-  },
-  {
-    "id": "seed-4",
-    "title": "Client Google Business Profile Post Prompt",
-    "category": "Google Business Profile",
-    "tags": "Google, GBP, local SEO, client, maps",
-    "notes": "Complete every field in the CLIENT BRIEF, then paste into Claude.",
-    "created": 1777844682699,
-    "prompt": "You are an SEO-informed copywriter creating Google Business Profile (GBP) posts for client businesses.\n\nCLIENT BRIEF:\nBusiness name: [e.g. Castillo Plumbing]\nIndustry: [e.g. Trades & home services]\nLocation: [e.g. Chermside, Brisbane QLD]\nService area: [e.g. North Brisbane and surrounds]\nWhat they do: [1-2 sentences]\nTarget customer: [Who is finding this on Google?]\nPost type: [What's new / Educational tip / Trust builder / Offer / Seasonal]\nService or topic: [e.g. Hot water system replacement]\nLocal SEO keywords: [2-4 phrases]\nCall to action: [One specific action]\nSpecific details: [Optional]\n\nGBP FORMATTING RULES:\n- Plain paragraphs only — no bullets, no bold, no hashtags, no emojis\n- 150-300 words — hard limit\n- First sentence states the benefit or service\n- SEO phrases woven in naturally\n- Mention suburb or city at least once\n\nOUTPUT: Write exactly 3 GBP post options (Empathy-first / Solution-first / Authority-first), then add a RECOMMENDATION."
-  },
-  {
-    "id": "seed-5",
-    "title": "TBS LinkedIn Post Prompt — Ready to Use",
-    "category": "LinkedIn",
-    "tags": "LinkedIn, ready-to-use, TBS, fast, publish-ready",
-    "notes": "Only change the Post topic and Post format fields.",
-    "created": 1777931082699,
-    "prompt": "You are a specialist LinkedIn content writer for Triumph Business Solutions.\n\nCLIENT BRIEF:\nBusiness name: Triumph Business Solutions\nIndustry: Digital marketing & web services\nLocation: Cashmere, north Brisbane, Queensland\nBrand tone: Direct, plain-spoken, and quietly authoritative.\n\nPost topic: [INSERT TOPIC HERE]\nPost format: [INSERT FORMAT — Expert insight / Myth-busting / Reframe / Story beat / Direct opinion]\nSpecific details: [OPTIONAL]\nDesired CTA: Either a thought-provoking question or a natural mention of how Triumph helps.\n\nRULES:\n- First person from business owner\n- 150-300 words\n- No buzzwords\n- 3-5 hashtags: #DigitalMarketing #SmallBusinessAustralia #BrisbaneMarketing #WebsiteDesign #SEO\n\nOUTPUT: 3 post options + RECOMMENDATION."
-  },
-  {
-    "id": "seed-6",
-    "title": "Google Business Profile Prompt (TBS) — Ready to Use",
-    "category": "Google Business Profile",
-    "tags": "Google, GBP, ready-to-use, local SEO, TBS",
-    "notes": "Update Post type and Service or topic to highlight only.",
-    "created": 1778017482699,
-    "prompt": "You are an SEO-informed copywriter creating Google Business Profile posts for Triumph Business Solutions.\n\nCLIENT BRIEF:\nBusiness name: Triumph Business Solutions\nLocation: Cashmere, north Brisbane, Queensland\nService area: North Brisbane and surrounds. Also serves clients across Australia remotely.\nTarget customer: Small business owners in Brisbane searching for digital marketing.\nLocal SEO keywords: Brisbane digital marketing, social media management Brisbane, website design Brisbane, SEO Brisbane small business\nCTA: Call or message Triumph Business Solutions today to start the conversation.\n\nPost type: [INSERT POST TYPE — What's new / Educational tip / Trust builder / Offer / Seasonal]\nService or topic: [INSERT TOPIC HERE]\nSpecific details: [OPTIONAL]\n\nRULES:\n- Plain paragraphs only — no bullets, bold, hashtags, or emojis\n- 150-300 words\n- First sentence states benefit or service, never business name\n- Mention Cashmere, north Brisbane, or Brisbane at least once\n\nOUTPUT: 3 GBP post options (Empathy-first / Solution-first / Authority-first) + RECOMMENDATION."
-  }
+  {"id":"as-1","title":"Floral Fairy Flowers","category":"Floral & Nature","tags":"floral, fairy, watercolor, pastel, clipart","notes":"Use Clipart style in Artistly. Great for Etsy digital downloads.","created":1777585482699,"prompt":"A pretty bunch of fairy flowers, featuring pastel-colored blossoms in shades of pink, purple, and blue, tied together with a silken ribbon. The petals are delicate and translucent, painted in soft watercolor gradients to give them a magical, ethereal glow."},
+  {"id":"as-2","title":"Fairy Mushroom House","category":"Fantasy & Whimsical","tags":"mushroom, cottage, fairycore, watercolor, whimsical","notes":"Use Clipart style. Dreamy fairycore aesthetic.","created":1777671882699,"prompt":"A cozy, magical mushroom cottage with a rounded cap adorned with floral accents in pastel pinks, lavenders, and creams. The cottage has a tiny wooden door and softly glowing windows, painted in soft watercolor tones with subtle details, creating a dreamy, fairycore aesthetic."},
+  {"id":"as-3","title":"Magical Baby Unicorn","category":"Fantasy & Whimsical","tags":"unicorn, baby, pastel, watercolor, whimsical, playful","notes":"Use Whimsical Fantasy or Clipart style. Popular for kids clipart.","created":1777758282699,"prompt":"A adorable baby unicorn sitting down with a flowing mane and tail in pastel rainbow colors, its horn is a delicate swirl of gold and pearlescent tones. It has large, innocent eyes and a gentle expression, painted in soft watercolor hues with a subtle blush on its cheeks and hooves."},
+  {"id":"as-4","title":"Kids Storybook Tractor","category":"Characters & People","tags":"tractor, kids, storybook, watercolor, floral, clipart","notes":"Use Clipart style. Suits kids illustrations and nursery themes.","created":1777844682699,"prompt":"A light red farmer tractor with a roof and large, clear windows, adorned with minimal floral decor. The watercolor illustration uses gentle blush tones and soft outlines, suitable for a kids story illustration."},
+  {"id":"as-5","title":"Cute Cowboy Toddler","category":"Characters & People","tags":"cowboy, toddler, boy, watercolor, cute, character","notes":"Use Watercolor style. Great for personalised kids products.","created":1777931082699,"prompt":"An adorable toddler boy dressed as a cowboy, brown hair, wearing a brown hat, with bright blue eyes. His outfit includes a beige coloured shirt, brown vest, denim jeans, a shiny golden belt buckle and cowboy boots and a red bandana. Painted in soft watercolor style with gentle shading creating a playful, cute character."},
+  {"id":"as-6","title":"Pastel Rainbow Caterpillar","category":"Animals & Creatures","tags":"caterpillar, pastel, rainbow, nursery, watercolor, clipart","notes":"Use Clipart style. Ideal for nursery art and kids products.","created":1778017482699,"prompt":"A cute caterpillar, its body is a gradient of pastel rainbow hues - lavender, peach, and sky blue. Its expression is calm and curious, captured with gentle watercolor washes and delicate brushstrokes. The style is minimal and heartwarming, ideal for nursery art."},
+  {"id":"as-7","title":"Sweet Bumble Bee","category":"Animals & Creatures","tags":"bee, bumble bee, kawaii, watercolor, cute, honey","notes":"Use Kawaii style for extra cuteness. Works beautifully for kids stationery.","created":1778103882699,"prompt":"A super cute bumble bee with rosy cheeks and a gentle smile, its eyes radiating sweetness. Painted in a soft watercolor palette of honey yellows and creamy browns, the bee's wings are intricately detailed with wet-blended shades of pale lavender and peach. The overall effect is delicate and heartwarming."},
+  {"id":"as-8","title":"Tea Party Teacup & Gingerbread Man","category":"Food & Objects","tags":"tea party, teacup, gingerbread, whimsical, watercolor","notes":"Use Watercolor Portrait style. Great for tea-themed Etsy clipart packs.","created":1778190282699,"prompt":"A cute white & pink teacup with a gold floral design on a saucer, painted in watercolor with a soft, subtle blush on its rounded edges. A delightful gingerbread man with a slightly mischievous grin sits inside. The gingerbread man is decorated with candy buttons and delicate icing swirls. The scene is painted in gentle watercolor strokes with a dreamy, whimsical look."},
+  {"id":"as-9","title":"Purple Watering Can with Sprouts","category":"Floral & Nature","tags":"watering can, garden, sprouts, watercolor, illustration, pastel","notes":"Use Illustration Painting style. Lovely for gardening-themed clipart.","created":1778276682699,"prompt":"A light purple watering can, with vibrant green sprouts emerging. The watering can is painted in soft watercolor style, featuring wet-blended gradients and gentle shading that highlight its rounded form. The sprouts are a mix of leafy greens and pink and purple flowers."},
+  {"id":"as-10","title":"Whimsical Gingerbread Man","category":"Food & Objects","tags":"gingerbread, watercolor, whimsical, pastel, holiday, cute","notes":"Use Watercolor style. Great for Christmas and holiday clipart packs.","created":1778363082699,"prompt":"A gingerbread man, smiling, adorned with light purple icing in a whimsical pattern and three bright pink heart buttons. His eyes are sparkling with joy. Painted in a delicate watercolor style. He stands with arms outstretched, as if offering a hug, using soft pastel hues."},
+  {"id":"as-11","title":"Sweet Crowned Peach","category":"Food & Objects","tags":"peach, crown, whimsical, watercolor, cute, fruit","notes":"Use Whimsical style. Trending kawaii fruit style for stickers and clipart.","created":1778449482699,"prompt":"A sweet little peach with its eyes closed in a blissful smile, painted with delicate watercolor strokes of light orange and subtle blush. A perky green leaf adds a touch of freshness. Perched upon its head is a golden crown, shining with gentle watercolor highlights."},
+  {"id":"as-12","title":"Pastel Greenery Branch","category":"Floral & Nature","tags":"greenery, branch, leaves, pastel, clipart, nature, ethereal","notes":"Use Clipart style. Versatile for borders, frames and nature-themed packs.","created":1778535882699,"prompt":"A single branch with nine teardrop-shaped leaves, painted in pastel hues of green and light blue. The leaves are arranged symmetrically, with a gentle curve to the branch. Fine details are added with light, feathery brushstrokes, creating a dreamy, ethereal effect."},
+  {"id":"as-13","title":"Boho Nursery Animals — Baby Bunny","category":"Animals & Creatures","tags":"boho, nursery, bunny, watercolor, beige, clipart","notes":"Use Clipart style. Perfect for nursery decor and baby shower products.","created":1778622282699,"prompt":"A sweet baby bunny sitting gently with floppy ears and rosy cheeks, painted in soft watercolor tones of beige, cream, dusty blush, and muted sage green. Minimal boho nursery aesthetic with delicate brush textures and subtle shading, whimsical storybook feel, isolated transparent background PNG clipart, highly detailed."},
+  {"id":"as-14","title":"Pastel Watercolor Florals — Wildflower Bouquet","category":"Floral & Nature","tags":"floral, bouquet, pastel, watercolor, feminine, clipart","notes":"Use Clipart or Watercolor style. Great for wedding and feminine brand products.","created":1778708682699,"prompt":"A delicate bouquet of wildflowers featuring blush pink peonies, lavender sprigs, and pale blue blossoms tied with a soft silk ribbon. Painted in dreamy pastel watercolor gradients with airy brushstrokes and an ethereal feminine feel, isolated transparent background PNG clipart."},
+  {"id":"as-15","title":"Kawaii Food Characters — Strawberry Milk Carton","category":"Food & Objects","tags":"kawaii, food, strawberry, milk, pastel, cute, clipart","notes":"Use Kawaii style. Trending for sticker packs and kids products.","created":1778795082699,"prompt":"A cute smiling strawberry milk carton with rosy cheeks and tiny arms, decorated in pastel pink and cream tones. Kawaii illustration style with rounded features, soft watercolor texture, playful expression, isolated transparent background PNG clipart."},
+  {"id":"as-16","title":"Whimsical Christian Clipart — Floral Cross","category":"Seasonal & Holiday","tags":"christian, cross, floral, watercolor, lilies, roses, clipart","notes":"Use Clipart or Watercolor style. Great for Easter, baptism and faith-based products.","created":1778881482699,"prompt":"A beautifully illustrated floral cross adorned with soft white lilies, blush roses, and eucalyptus greenery. Painted in delicate watercolor tones with gentle shading and a peaceful Christian aesthetic, isolated transparent background PNG clipart."},
+  {"id":"as-17","title":"Retro Groovy Smiley Clipart","category":"Characters & People","tags":"retro, groovy, smiley, 70s, daisy, pastel, clipart","notes":"Use Clipart style. Popular for retro aesthetic stickers and prints.","created":1778967882699,"prompt":"A retro smiley face wearing heart-shaped sunglasses surrounded by groovy daisies and sparkles in peach, mustard, pink, and teal tones. Fun 70s inspired aesthetic with soft watercolor texture and playful feminine energy, isolated transparent background PNG clipart."},
+  {"id":"as-18","title":"Teacher Classroom Clipart — Pastel Books","category":"Characters & People","tags":"teacher, classroom, school, books, watercolor, pastel, clipart","notes":"Use Clipart style. Perfect for teacher appreciation and classroom decor products.","created":1779054282699,"prompt":"A cheerful stack of pastel school books tied with a ribbon alongside pencils, apples, and tiny daisies. Painted in soft watercolor style with warm classroom tones and a playful teacher aesthetic, isolated transparent background PNG clipart."},
+  {"id":"as-19","title":"Spooky Cute Halloween — Ghost with Pumpkin","category":"Seasonal & Holiday","tags":"halloween, ghost, pumpkin, spooky cute, pastel, watercolor, clipart","notes":"Use Clipart or Whimsical style. Great for Halloween sticker packs and seasonal products.","created":1779140682699,"prompt":"A cute smiling ghost wrapped in a pastel pink scarf holding a tiny pumpkin candy bucket. Painted in whimsical watercolor tones of lavender, peach, cream, and soft grey with a spooky cute aesthetic, isolated transparent background PNG clipart."},
+  {"id":"as-20","title":"Baby Milestone Elements — Number Three","category":"Characters & People","tags":"baby, milestone, nursery, number, watercolor, stars, clipart","notes":"Use Clipart style. Change the number for different milestones.","created":1779227082699,"prompt":"A soft watercolor number three surrounded by clouds, stars, moons, and tiny teddy bears in muted beige, dusty blue, and blush pink tones. Minimal baby milestone aesthetic with dreamy nursery styling, isolated transparent background PNG clipart."},
+  {"id":"as-21","title":"Feminine Empowerment Icons — Self Care Flat Lay","category":"Food & Objects","tags":"feminine, self care, coffee, floral, journal, watercolor, clipart","notes":"Use Clipart or Watercolor style. Popular for planners, journals and feminine brand products.","created":1779313482699,"prompt":"A stylish takeaway coffee cup beside a floral journal, reading glasses, and soft pink peonies. Painted in elegant watercolor tones with a feminine self care aesthetic and delicate shading, isolated transparent background PNG clipart."},
+  {"id":"as-22","title":"Cottagecore Farm Animals — Highland Cow Calf","category":"Animals & Creatures","tags":"cottagecore, highland cow, farm, watercolor, earthy, clipart","notes":"Use Clipart style. Hugely popular cottagecore trend.","created":1779399882699,"prompt":"A fluffy highland cow calf sitting peacefully among tiny wildflowers and greenery. Painted in soft earthy watercolor tones with a cozy cottagecore farmhouse aesthetic, isolated transparent background PNG clipart."},
+  {"id":"as-23","title":"Watercolor Christmas — Gingerbread House","category":"Seasonal & Holiday","tags":"christmas, gingerbread house, watercolor, pastel, holiday, clipart","notes":"Use Clipart or Watercolor style. Great for Christmas sticker packs.","created":1779486282699,"prompt":"A festive gingerbread house decorated with white icing, candy canes, and soft pastel Christmas florals. Painted in whimsical watercolor style with blush pink, cream, and sage green holiday tones, isolated transparent background PNG clipart."},
+  {"id":"as-24","title":"Easter Watercolor Collection — Easter Basket","category":"Seasonal & Holiday","tags":"easter, basket, bunny, eggs, watercolor, spring, clipart","notes":"Use Clipart style. Great for Easter seasonal products and spring collections.","created":1779572682699,"prompt":"A wicker Easter basket filled with pastel eggs, tulips, and a tiny bunny peeking over the edge. Painted in delicate watercolor tones with soft spring colors and whimsical Easter charm, isolated transparent background PNG clipart."},
+  {"id":"as-25","title":"Homestead Kitchen Clipart — Sourdough & Jam","category":"Food & Objects","tags":"homestead, kitchen, sourdough, farmhouse, watercolor, rustic, clipart","notes":"Use Clipart style. Trending cottagecore and homestead aesthetic.","created":1779659082699,"prompt":"A rustic sourdough loaf resting beside a wooden rolling pin and a jar of homemade strawberry jam. Painted in warm watercolor tones with cozy farmhouse kitchen styling, isolated transparent background PNG clipart."},
+  {"id":"as-26","title":"Soft Celestial Nursery — Sleepy Moon","category":"Fantasy & Whimsical","tags":"celestial, nursery, moon, stars, watercolor, dreamy, clipart","notes":"Use Clipart or Whimsical style. Perfect for nursery decor and baby products.","created":1779745482699,"prompt":"A sleepy crescent moon wearing a tiny nightcap surrounded by fluffy clouds and sparkling stars. Painted in soft watercolor shades of cream, dusty blue, and muted gold with a dreamy nursery aesthetic, isolated transparent background PNG clipart."},
+  {"id":"as-27","title":"Fairy Garden Elements — Mushroom Cottage","category":"Fantasy & Whimsical","tags":"fairy, mushroom, cottage, garden, watercolor, magical, clipart","notes":"Use Clipart or Whimsical style. Great for fairy garden and fantasy themed products.","created":1779831882699,"prompt":"A whimsical mushroom cottage with tiny glowing windows, floral vines, and a rounded wooden door. Painted in magical pastel watercolor tones with fairy garden charm and storybook detail, isolated transparent background PNG clipart."},
+  {"id":"as-28","title":"Cute Seasonal Birds — Winter Robin","category":"Animals & Creatures","tags":"robin, bird, winter, watercolor, seasonal, cozy, clipart","notes":"Use Clipart style. Great for Christmas, winter and seasonal products.","created":1779918282699,"prompt":"A tiny robin perched on a snowy branch with rosy cheeks and fluffy feathers. Painted in soft watercolor tones with delicate winter details and a cozy seasonal aesthetic, isolated transparent background PNG clipart."},
+  {"id":"as-29","title":"Whimsical Insects — Pastel Butterfly","category":"Animals & Creatures","tags":"butterfly, insect, pastel, fairycore, watercolor, whimsical, clipart","notes":"Use Clipart or Whimsical style. Popular for fairycore and nature themed products.","created":1780004682699,"prompt":"A sweet pastel butterfly with translucent rainbow wings and tiny smiling eyes. Painted in delicate watercolor gradients with whimsical fairycore styling, isolated transparent background PNG clipart."},
+  {"id":"as-30","title":"Floral Tea Party — Vintage Teacup","category":"Food & Objects","tags":"tea party, teacup, floral, watercolor, feminine, vintage, clipart","notes":"Use Clipart or Watercolor style. Great for tea party and feminine brand products.","created":1780177482699,"prompt":"A vintage teacup decorated with blush roses and gold accents, filled with soft pink macarons and tiny flowers. Painted in elegant watercolor style with a whimsical feminine tea party aesthetic, isolated transparent background PNG clipart."},
+  {"id":"as-31","title":"Soft Vintage Toy — Classic Teddy Bear","category":"Characters & People","tags":"teddy bear, vintage, toy, watercolor, nostalgic, neutral, clipart","notes":"Use Clipart style. Great for nursery, baby shower and vintage aesthetic products.","created":1780263882699,"prompt":"A classic teddy bear holding a patchwork heart with vintage stitched details and a soft neutral color palette. Painted in delicate watercolor tones with nostalgic storybook charm, isolated transparent background PNG clipart."}
 ];
 
 // ── STATE ───────────────────────────────────────────────
 let prompts = [], activeCategory = 'all', currentView = 'grid', editId = null, deleteId = null;
 
-const CATEGORIES = ['Triumph Business Solutions','Social Media','LinkedIn','Google Business Profile','Facebook','Instagram','Marketing','Sales','Customer Service','Email','Operations','Clipart / Creative','General'];
-const TAG_CLASSES = ['tag-teal','tag-olive','tag-kw','tag-kw','tag-kw'];
+const CATEGORIES = ['Clipart','Floral & Nature','Characters & People','Animals & Creatures','Fantasy & Whimsical','Food & Objects','Seasonal & Holiday','General'];
+const TAG_CLASSES = ['tag-gold','tag-teal','tag-kw','tag-kw'];
 
 // ── SYNC ────────────────────────────────────────────────
 function setSyncStatus(s) {
@@ -370,7 +350,7 @@ function render() { renderSidebar(); renderMain(); }
 
 function renderSidebar() {
   const cats = {};
-  prompts.forEach(p => { cats[p.category] = (cats[p.category]||0)+1; });
+  prompts.forEach(p => { if(p.category) cats[p.category] = (cats[p.category]||0)+1; });
   let html = `<div class="cat-item ${activeCategory==='all'?'active':''}" onclick="setCategory('all')">
     <span>All prompts</span><span class="cat-count">${prompts.length}</span></div>`;
   [...new Set([...CATEGORIES,...Object.keys(cats)])].forEach(cat => {
@@ -397,7 +377,7 @@ function renderMain() {
   document.getElementById('pageTitle').textContent = activeCategory==='all' ? 'All Prompts' : activeCategory;
   document.getElementById('pageSubtitle').textContent = `${filtered.length} prompt${filtered.length!==1?'s':''} ${q?`matching "${q}"`:' in library'}`;
 
-  const cats = [...new Set(prompts.map(p=>p.category))].length;
+  const cats = [...new Set(prompts.map(p=>p.category).filter(Boolean))].length;
   document.getElementById('statsRow').innerHTML = `
     <div class="stat-pill"><strong>${prompts.length}</strong> total prompts</div>
     <div class="stat-pill"><strong>${cats}</strong> categories</div>
@@ -405,9 +385,9 @@ function renderMain() {
 
   const container = document.getElementById('promptContainer');
   if (!filtered.length) {
-    container.innerHTML = `<div class="empty"><div class="empty-icon">📋</div>
+    container.innerHTML = `<div class="empty"><div class="empty-icon">🎨</div>
       <h3>${q||activeCategory!=='all'?'No prompts found':'Library is empty'}</h3>
-      <p>${q||activeCategory!=='all'?'Try a different search or category.':'Click <strong>+ New Prompt</strong> to get started.'}</p></div>`;
+      <p>${q||activeCategory!=='all'?'Try a different search or category.':'Click <strong>+ New Prompt</strong> to add your first prompt.'}</p></div>`;
     return;
   }
   container.className = currentView==='grid' ? 'prompt-grid' : 'prompt-list';
@@ -427,7 +407,7 @@ function cardHTML(p) {
       </div>
     </div>
     <div class="card-tags">
-      <span class="tag tag-cat">${esc(p.category)}</span>
+      <span class="tag tag-cat">${esc(p.category||'General')}</span>
       ${tags.map((t,i)=>`<span class="tag ${TAG_CLASSES[i%TAG_CLASSES.length]}">${esc(t)}</span>`).join('')}
     </div>
     <div class="card-body clamped" id="prev-${p.id}">${esc(p.prompt)}</div>
@@ -461,7 +441,7 @@ function applyFilters() { renderMain(); renderSidebar(); }
 function openModal(id) {
   editId = id||null;
   ['fTitle','fPrompt','fTags','fNotes'].forEach(f=>document.getElementById(f).value='');
-  document.getElementById('fCat').value='Triumph Business Solutions';
+  document.getElementById('fCat').value='Clipart';
   document.getElementById('customCatField').style.display='none';
   if(id) {
     const p=prompts.find(x=>x.id===id);
